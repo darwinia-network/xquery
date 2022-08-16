@@ -14,6 +14,8 @@ generator typegraphql {
   provider = "typegraphql-prisma"
 }
 
+// Model definitions
+
 model Post {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -38,4 +40,12 @@ model User {
   name    String?
   posts   Post[]
   profile Profile?
+}
+
+model Message {
+  id    Int    @id @default(autoincrement())
+  key String
+  srcTx String
+  srcBlockNumber String?
+  srcSender String?
 }
