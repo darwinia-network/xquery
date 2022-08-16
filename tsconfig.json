@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": [
+      "esnext",
+      "es2018",
+      "esnext.asynciterable"
+    ],
+    "esModuleInterop": true,
+    "target": "es2018",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+}
