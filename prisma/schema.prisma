@@ -48,4 +48,5 @@ model Message {
   srcTx String
   srcBlockNumber String?
   srcSender String?
+  tgtTx String?
 }

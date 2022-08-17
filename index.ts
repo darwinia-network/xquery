@@ -8,6 +8,19 @@ const prisma = new PrismaClient()
 // appllo
 const { ApolloServer } = require('apollo-server')
 
+// // subquery
+// graphql schema => sequelize schema => database
+
+// // DATA
+// // 1. prisma: orm
+//    2. typegraphql: define graphql schema
+//    3. typegraphql-prisma: schema mapping
+//    4. ApolloServer
+// // WORKER
+//    job queue
+   
+// prisma schema => graphql schema
+
 
 async function main() {
     const schema = await buildSchema({
