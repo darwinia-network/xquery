@@ -16,31 +16,6 @@ generator typegraphql {
 
 // Model definitions
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
-
-model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  posts   Post[]
-  profile Profile?
-}
 
 model Message {
   id    Int    @id @default(autoincrement())
@@ -50,3 +25,27 @@ model Message {
   srcSender String?
   tgtTx String?
 }
+
+
+
+model LcmpMessage {
+  messageId String @id // chain+laneId+nonce
+  sourceChain String
+  targetChain String
+  sourceCursor String   @default("")
+  acceptedHash String   @default("")
+  dispatchHash String   @default("")
+  deliveredHash String  @default("")
+  dispatchResult String @default("")
+  deliveredResult String @default("")
+  createdAt DateTime @default(now())
+  updateAt DateTime?
+  acceptedTime String  @default("")
+  dipatchTime String   @default("")
+  deliveredTime String @default("")
+  
+}
+
+
+
+

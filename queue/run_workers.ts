@@ -1,10 +1,22 @@
-import { start } from "./worker"
-import * as path from 'path';
-import * as fs from 'fs';
+import { start } from "./worker";
+import * as path from "path";
+import * as fs from "fs";
+import { time } from "console";
+import { resolve } from "path";
+import { sleep } from "../utils";
 var normalizedPath = path.join(__dirname, "handlers");
 
-fs.readdirSync(normalizedPath).forEach(function(file: string) {
-  const handler = require("./handlers/" + file);
-  const handlerName = file.split(".")[0]
-  start(handlerName, handler)
+fs.readdirSync(normalizedPath).forEach(async function (file: string) {
+      const handlers = require("./handlers/" + file);
+      const handlerFileName = file.split(".")[0];
+      // 变量handelrs导出的函数 分析不同函数特征(函数注解) 管理执行，或注入参数等?
+      for (var funName in handlers) {
+            if (typeof handlers[funName] === "function") {
+                  // 源链消息生成数据的固定函数
+                  if (funName === "sourcMessage") {
+                        handlers[funName]();
+                  }
+                  start(handlerFileName, funName, handlers);
+            }
+      }
 });

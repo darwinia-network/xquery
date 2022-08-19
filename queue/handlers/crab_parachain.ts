@@ -1,9 +1,11 @@
 // const fetch = require('../fetch.js').fetch('http://localhost:3000');
 
-import { MessageChannel } from "worker_threads"
+import { normalize } from "node:path/posix";
+import { start } from "repl";
+import { MessageChannel } from "worker_threads";
 
 // const buildQueryStr = messageId => {
-//     return `{  
+//     return `{
 //         query {
 //             s2sEvent(id: "${messageId}") {
 //                 id
@@ -30,7 +32,6 @@ import { MessageChannel } from "worker_threads"
 //     const blockNumber = result.block.number
 //     Message.create()
 
-
 //     return {
 //         messageKey: `${blockNumber}-${params.messageId}`, // dirname
 //         messageData: result // file content
@@ -43,6 +44,6 @@ import { MessageChannel } from "worker_threads"
 //     }
 // }
 
-export const handle = async (params: any) => {
-    console.log(params)
-}
+// export const handle = async (params: Record<string, string>) => {
+//       console.log(params);
+// };

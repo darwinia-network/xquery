@@ -29,6 +29,18 @@ CREATE TABLE "User" (
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Message" (
+    "id" SERIAL NOT NULL,
+    "key" TEXT NOT NULL,
+    "srcTx" TEXT NOT NULL,
+    "srcBlockNumber" TEXT,
+    "srcSender" TEXT,
+    "tgtTx" TEXT,
+
+    CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
 

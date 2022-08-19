@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init:db": "npx prisma migrate dev --name init",
+    "generate:prisma": "npx prisma generate --schema=./prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bull-arena": "^3.0.5",
     "@types/node": "^18.7.5",
     "prisma": "~4.2.0",
     "ts-node": "^10.9.1",
@@ -27,9 +30,9 @@
     "graphql": "^15.8.0",
     "graphql-fields": "^2.0.3",
     "graphql-scalars": "^1.18.0",
+    "ramda": "^0.28.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.4.0",
-    "type-graphql": "^1.1.1",
-    "ramda": "^0.28.0"
+    "type-graphql": "^1.1.1"
   }
 }
