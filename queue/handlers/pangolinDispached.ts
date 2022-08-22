@@ -4,7 +4,7 @@ import { fetch, sleep } from "../utils";
 // pangolin 跨链消息源数据生成
 export async function sourcMessage() {}
 
-export async function handleDispached(input: Record<string, any>) {
+export async function handle(input: Record<string, any>) {
       console.log(`pangolin receive ${JSON.stringify(input)}`);
       if (input.messageId === undefined) {
             return;
@@ -38,8 +38,8 @@ export async function handleDispached(input: Record<string, any>) {
                   // 传递下一个任务 delivered
                   return {
                         nextHandler: {
-                              name: "pangoro", // handler 文件名称
-                              handler: "handleDelivered", // func name
+                              name: "pangoroDelivered", // handler 文件名称
+                              handler: "handle", // func name
                               // 业务输入参数个数可变
                               params: {
                                     messageId: input.messageId,
