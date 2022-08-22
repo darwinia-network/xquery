@@ -8,6 +8,12 @@ const prisma = new PrismaClient();
 // appllo
 const { ApolloServer } = require("apollo-server");
 
+import {
+      ApolloServerPluginCacheControl,
+      ApolloServerPluginLandingPageDisabled,
+      ApolloServerPluginLandingPageGraphQLPlayground,
+} from "apollo-server-core";
+
 // // subquery
 // graphql schema => sequelize schema => database
 
@@ -22,6 +28,14 @@ const { ApolloServer } = require("apollo-server");
 // prisma schema => graphql schema
 
 async function main() {
+      const apolloServerPlugins = [
+            ApolloServerPluginCacheControl({
+                  defaultMaxAge: 5,
+                  calculateHttpHeaders: true,
+            }),
+            ApolloServerPluginLandingPageGraphQLPlayground(),
+      ];
+
       const schema = await buildSchema({
             resolvers,
             validate: false,
@@ -31,6 +45,7 @@ async function main() {
             schema,
             introspection: true,
             context: () => ({ prisma }),
+            plugins: apolloServerPlugins,
       });
 
       server.listen().then(() => {
