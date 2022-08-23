@@ -11,6 +11,7 @@ fs.readdirSync(normalizedPath).forEach(async function (file: string) {
       const handlers = require("./handlers/" + file);
       const handlerFileName = file.split(".")[0];
       localHandeNameSet.add(handlerFileName);
+      global;
       start(handlerFileName, handlers);
 
       // 变量handelrs导出的函数 分析不同函数特征(函数注解) 管理执行，或注入参数等?
