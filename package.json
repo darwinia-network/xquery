@@ -24,12 +24,13 @@
     "bee-queue": "^1.4.0",
     "bull-arena": "^3.29.5",
     "class-validator": "^0.13.2",
+    "fp-ts": "^2.12.2",
+    "fp-ts-std": "^0.14.2",
     "graphql": "^15.8.0",
     "graphql-fields": "^2.0.3",
     "graphql-scalars": "^1.18.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.4.0",
-    "type-graphql": "^1.1.1",
-    "ramda": "^0.28.0"
+    "type-graphql": "^1.1.1"
   }
 }

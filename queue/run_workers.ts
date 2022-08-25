@@ -6,5 +6,6 @@ var normalizedPath = path.join(__dirname, "handlers");
 fs.readdirSync(normalizedPath).forEach(function(file: string) {
   const handler = require("./handlers/" + file);
   const handlerName = file.split(".")[0]
-  start(handlerName, handler)
+  start(handlerName, handler.handler)
+  console.log(`"${handlerName}" worker is running.`)
 });

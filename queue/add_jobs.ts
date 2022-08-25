@@ -1,13 +1,19 @@
 import Queue from 'bee-queue'
-import { sleep } from "../utils"
+import * as SubQuery from "./utils/subquery"
+import * as O from "fp-ts/lib/Option";
+import * as E from "fp-ts/lib/Either";
+import { pipe } from 'fp-ts/lib/function'
 
-const fetch = require('./fetch_graph').fetch('http://localhost:3000');
+const fetchSubQuery = SubQuery.fetchSubQuery("http://localhost:3000");
 
-const buildQueryStr = (size: number, after: string) => {
-    let from = '' 
-    if(after) { 
-        from = `after: "${after}",`
-    }
+const buildQueryStr = (size: number, after: O.Option<string>) => {
+    const from = pipe(
+        after,
+        O.match(
+            () => '',
+            (a) => `after: "${a}",`
+        )
+    )
 
     return `{  
         query {
@@ -24,51 +30,68 @@ const buildQueryStr = (size: number, after: string) => {
     }`
 }
 
+type S2SEvents = {
+    s2sEvents: {
+        nodes: [{
+            id: string
+            startTimestamp: string
+        }],
+        edges: [{
+            cursor: string
+        }]
+    }
+}
+
 const addJob = (queue: Queue, messageId: string) => {
     const params = { messageId: messageId }
     console.log(params)
     const job = queue.createJob(params);
-    job
-        .timeout(3000)
-        .retries(2)
-        .save()
+    job.save()
 }
 
-// const fetchMessages = async (cursor: string) => {
-//     const query = buildQueryStr(2, cursor)
-//     const result = await fetch(query, "s2sEvents")
-//     const nodes = result.nodes;
+// const main = async () => {
+//     const queue = new Queue("crab_parachain")
+
+//     let cursor: O.Option<string> = O.none;
+//     while (true) {
+//         const queryStr = buildQueryStr(2, cursor)
+//         const result = await fetchSubQuery<S2SEvents>(queryStr)();
+
+//         pipe(
+//             E.Do,
+//             E.apS("nodes", pipe(
+//                 result,
+//                 E.map((result) => result.s2sEvents.nodes),
+//             )),
+//             E.apS("edges", pipe(
+//                 result,
+//                 E.map((result) => result.s2sEvents.edges),
+//             )),
+//             E.map(({ nodes, edges }) => {
+//                 if (nodes.length > 0) {
+//                     cursor = O.some(edges[edges.length - 1].cursor)
+//                     for (let i = 0; i < nodes.length; i++) {
+//                         console.log(nodes[i].id)
+//                         addJob(queue, nodes[i].id)
+
+//                     }
+//                     console.log("--------------")
+//                 } else {
+//                     sleep(6000 * 10).then(() => {
+//                         console.log("wait 6 mins")
+//                     })
+//                 }
+//             })
+//         )
+//     }
 // }
 
 const main = async () => {
     const queue = new Queue("crab_parachain")
-
-    let cursor = undefined;
-    while(true) {
-        const query = buildQueryStr(2, cursor)
-        const result = await fetch(query, "s2sEvents")
-        const nodes = result.nodes;
-        if(nodes.length > 0) {
-            const edges = result.edges;
-            cursor = edges[edges.length-1].cursor
-            for(let i = 0; i < nodes.length; i++) {
-                console.log(nodes[i].id)
-                addJob(queue, nodes[i].id)
-                
-            }
-            console.log("--------------")
-        } else {
-            await sleep(6000 * 10)
-        }
-        
-    }
-        
+    addJob(queue, "0x706163720x8")
 }
 
 main()
-    .then(async () => {
-        // await sleep(2000)
-    })
     .catch(async (e) => {
         console.error(e)
         process.exit(1)

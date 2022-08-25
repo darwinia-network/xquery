@@ -1,48 +1,55 @@
-// const fetch = require('../fetch.js').fetch('http://localhost:3000');
+import * as TE from "fp-ts/lib/TaskEither"
+import { some, none, Option } from "fp-ts/lib/Option"
+import { pipe } from "fp-ts/lib/function"
+import { Handler, NextHandlerWithParams, HandlerError } from "../worker"
+import * as SubQuery from "../utils/subquery"
 
-import { MessageChannel } from "worker_threads"
+const fetchSubQuery = SubQuery.fetchSubQuery("http://localhost:3000");
 
-// const buildQueryStr = messageId => {
-//     return `{  
-//         query {
-//             s2sEvent(id: "${messageId}") {
-//                 id
-//                 laneId
-//                 nonce
-//                 requestTxHash
-//                 senderId
-//                 block
-//             }
-//         }
-//     }`
-// }
-// const { Sequelize, DataTypes } = require('sequelize');
+const buildQueryStr = (messageId: string) => {
+    return `{  
+        query {
+            s2sEvent(id: "${messageId}") {
+                id
+                laneId
+                nonce
+                requestTxHash
+                senderId
+                block
+            }
+        }
+    }`
+}
 
-// const sequelize = new Sequelize('postgres://postgres:postgres@localhost:5432/postgres')
+type S2SEvent = {
+    s2sEvent: {
+        id: string,
+        laneId: string,
+        nonce: number,
+        requestTxHash: string,
+        senderId: string,
+        block: {
+            blockHash: string
+        }
+    }
+}
 
-// const Message = require('../models/Message.js')(sequelize, DataTypes)
+export const handler: Handler = {
+    handle: (params: unknown): TE.TaskEither<HandlerError, Option<NextHandlerWithParams>> => {
+        console.debug("In crab_parachain handler --------------------------")
+        console.debug(params as { messageId: string })
 
-// exports.handle = async (params) => {
-//     const queryStr = buildQueryStr(params.messageId)
+        const messageId = (params as { messageId: string }).messageId
+        const queryStr = buildQueryStr(messageId)
 
-//     const result = await fetch(queryStr, "s2sEvent")
-//     console.log(result.id)
-//     const blockNumber = result.block.number
-//     Message.create()
-
-
-//     return {
-//         messageKey: `${blockNumber}-${params.messageId}`, // dirname
-//         messageData: result // file content
-//         // nextHandler: {
-//         //     name: "kusama",
-//         //     params: {
-//         //         messageId: params.messageId
-//         //     }
-//         // }
-//     }
-// }
-
-export const handle = async (params: any) => {
-    console.log(params)
+        return pipe(
+            fetchSubQuery<S2SEvent>(queryStr),
+            TE.map((result) => result.s2sEvent.block.blockHash),
+            TE.map((blockHash) => some({
+                handlerName: "kusama",
+                params: { messageId, blockHash }
+            })),
+            TE.mapLeft((err) => new HandlerError(err))
+        )
+    }
 }

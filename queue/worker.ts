@@ -1,77 +1,78 @@
-import { sleep, mkdir, writeFile } from "../utils"
 import Queue from 'bee-queue'
+import * as O from "fp-ts/lib/Option";
+import { Option } from "fp-ts/Option"
+import { pipe } from 'fp-ts/lib/function'
+import * as TE from "fp-ts/lib/TaskEither";
+import { sleep } from 'fp-ts-std/Task'
+import { mkMilliseconds } from 'fp-ts-std/Date'
 
-// const save = (filename, dirname, content) => {
-//     const path = `./data/${dirname}`
-//     mkdir(path)
-//     writeFile(`${path}/${filename}.json`, content)
-// }
+import Result = TE.TaskEither;
 
-const addJob = (queueName: string, params: any) => {
+// TODO: better error
+export class HandlerError extends Error {
+    public constructor(cause?: Error) {
+        super('Handler Error')
+        this.cause = cause
+    }
+}
+
+export type NextHandlerWithParams = {
+    handlerName: string,
+    params: unknown
+}
+
+const sleep2 = (ms: number) => sleep(mkMilliseconds(ms))()
+
+const addJob = (queueName: string, params: unknown) => {
     const queue = new Queue(queueName)
     const job = queue.createJob(params)
-    job.timeout(3000).retries(2).save()
+    job.save()
 }
 
-const next = async (currentHandlerName: string, nextHandler: any) => {
-    if (nextHandler.name) {
-        if (nextHandler.name == currentHandlerName) {
-            await sleep(2000)
-        }
-
-        addJob(nextHandler.name, nextHandler.params)
-    }
+export interface Handler {
+    handle: (params: unknown) => Result<HandlerError, Option<NextHandlerWithParams>>;
 }
+// 
+
+export const start = (handlerName: string, handler: Handler) => {
+    new Queue(handlerName).process(10, (job: Queue.Job<unknown>, done: Queue.DoneCallback<any>) => {
+
+        const process = pipe(
+            handler.handle(job.data),
+            TE.match(
+                (_err) => {
+                    // TODO: err check
+                    sleep2(10 * 1000).then(() => {
+                        addJob(handlerName, job.data)
+                    })
+                    return "Done with error"
+                },
+                (optOfNhwp) => {
+                    return pipe(
+                        optOfNhwp,
+                        O.match(
+                            () => {
+                                return "Done with none"
+                            },
+                            (nhwp) => {
+                                addJob(nhwp.handlerName, nhwp.params)
+                                return "Done with next"
+                            }
+                        )
+                    )
+                }
+            ),
+
+        )
+
+        process().then((result) => {
+            // { _tag: 'Left', left: 'xxx' }
+            // { _tag: 'Right', right: { _tag: 'None' }
+            // { _tag: 'Right', right: { _tag: 'Some', value: 'done' } 
+            console.log(result)
+        })
 
 
-const handle = async (handlerName: string, handler: any, params: any) => {
-    const result = await handler.handle(params)
-    const messageKey = result.messageKey || params.messageKey
-
-    if (!messageKey) {
-        throw new Error(`Missing 'messageKey' in params or result of handler '${handlerName}'.`)
-    }
-
-    // add message key
-    let nextHandler = null
-    if (result.nextHandler && result.nextHandler.name) {
-        nextHandler = {
-            name: result.nextHandler.name,
-            params: result.nextHandler.params || {}
-        }
-        nextHandler.params.messageKey = messageKey
-    }
-
-    return {
-        messageKey: messageKey,
-        messageData: result.messageData,
-        nextHandler: nextHandler
-    }
-}
-
-export const start = async (handlerName: string, handler: any) => {
-    new Queue(handlerName).process(10, async (job) => {
-        try {
-            
-            const result = await handle(handlerName, handler, job.data)
-
-            // console.debug(`${handlerName}: params: ${JSON.stringify(job.data)}, result: ${JSON.stringify(result)}`)
-
-            // if (result.messageKey && result.messageData) {
-
-            //     save(handlerName, result.messageKey, JSON.stringify(result.messageData))
-
-            //     if (result.nextHandler) {
-            //         await next(handlerName, result.nextHandler)
-            //     }
-
-            // }
-        } catch (err) {
-            console.error(err)
-        }
-
-        return { ok: true }
+        return done(null, { ok: true })
     });
-    console.log(`${handlerName} worker is running`)
 }
-
