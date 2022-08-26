@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "target": "es2018",
+        "sourceMap": true,
+        "rootDir": "src",
+        "outDir": "./dist",
+        "noImplicitAny": true,
+        "noImplicitThis": true
+    },
+    "include": ["src/**/*"]
+}

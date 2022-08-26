@@ -1,17 +1,36 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
     "sourceMap": true,
+    "declaration": true,
+    "inlineSources": true,
     "outDir": "dist",
+    "baseUrl": ".",
     "strict": true,
+    "composite": true,
     "lib": [
       "esnext",
       "es2018",
       "esnext.asynciterable"
     ],
     "esModuleInterop": true,
-    "target": "es2018",
-    "module": "commonjs",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+        "@xscan/utils": ["packages/utils/src"],
+        "@xscan/utils/*": ["packages/utils/src/*"]
+    },
+    "skipLibCheck": true
   },
+  "references": [
+    { "path": "packages/utils" },
+    { "path": "packages/node"  },
+  ],
+  "include": ["packages/**/*"],
+  "exclude": ["**/node_modules/**"],
+  "typeRoots":["./node_modules/@types"]
 }

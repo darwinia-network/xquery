@@ -1,38 +1,37 @@
 {
   "name": "xscan",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "init:db": "npx prisma migrate dev --name init",
-    "generate:prisma": "npx prisma generate --schema=./prisma/schema.prisma"
-  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "keywords": [],
-  "author": "",
+  "author": "wayne",
   "license": "ISC",
+
+   "scripts": {
+   "build":"yarn workspaces foreach -ptA run build",
+   "lint": "eslint packages --ext .ts",
+   "test": "jest --coverage"
+  },
   "devDependencies": {
     "@types/bull-arena": "^3.0.5",
     "@types/node": "^18.7.5",
-    "prisma": "~4.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
     "ts-node": "^10.9.1",
     "typegraphql-prisma": "^0.21.3",
-    "typescript": "^4.7.4"
-  },
-  "dependencies": {
-    "@prisma/client": "~4.2.0",
-    "@types/graphql-fields": "^1.3.4",
-    "apollo-server": "^3.10.1",
-    "axios": "^0.27.2",
-    "bee-queue": "^1.4.0",
-    "bull-arena": "^3.29.5",
-    "class-validator": "^0.13.2",
-    "graphql": "^15.8.0",
-    "graphql-fields": "^2.0.3",
-    "graphql-scalars": "^1.18.0",
+    "typescript": "^4.7.4",
     "ramda": "^0.28.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.4.0",
-    "type-graphql": "^1.1.1"
+    "type-graphql": "^1.1.1",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3",
+    "regenerator-runtime": "^0.13.9",
+    "ts-jest": "^27.1.3",
+    "ts-loader": "^9.2.6"
   }
+  
 }
