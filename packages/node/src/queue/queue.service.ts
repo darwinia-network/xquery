@@ -1,45 +1,92 @@
-import { Inject, Injectable } from '@nestjs/common';
-
-import { start, localHandeNameSet } from './worker';
-import * as path from 'path';
-import * as fs from 'fs';
-import { time } from 'console';
-import { resolve } from 'path';
-import { sleep } from '../utils';
-import { Worker, workerData } from 'worker_threads';
-var normalizedPath = path.join(__dirname, 'handlers');
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';=
+import bull from 'bull';
+import { Handlers } from '../configure/handlers';
 
 @Injectable()
-export class QueueService {
-  private _config: string;
-  private _jobQueue: string[];
+export class QueueService implements OnModuleInit {
+  constructor(private handlerCfg: Handlers) {}
 
-  constructor() {}
+  async onModuleInit() {
+    
+    // mapping developer's handler function into queue
+    this.handlerCfg.handlerCfg.forEach((item, idx) => {
+      this.start(item.file, item.handler);
+    });
 
-  async init(): Promise<void> {
-    // 解析 handler
-    // 入队列执行
-    start(path);
   }
 
-  private async start(filePath: string) {
-    fs.readdirSync(normalizedPath).forEach(async function (file: string) {
-      const handlers = require(`./${filePath}/` + file);
-      const handlerFileName = file.split('.')[0];
-      localHandeNameSet.add(handlerFileName);
-      global;
-      start(handlerFileName, handlers);
+  private async handle(handler: any, params: any): Promise<any> {
+    try {
+      let result = await handler(params);
+      if (result && result.nextHandler?.name) {
+        return {
+          name: result.nextHandler.name,
+          params: result.nextHandler.params || {},
+        };
+      }
+      return;
+    } catch (error) {
+      // todo logger 
+       
+    }
 
-      // 变量handelrs导出的函数 分析不同函数特征(函数注解) 管理执行，或注入参数等?
-      // for (var funName in handlers) {
-      //       if (typeof handlers[funName] === "function") {
-      //             // 源链消息生成数据的固定函数
-      //             // if (funName === "sourcMessage") {
-      //             //       handlers[funName]();
-      //             // }
-      //             start(handlerFileName, funName, handlers);
-      //       }
-      // }
+     
+  }
+  /**
+   *   
+   * @param queueName 
+   * @param handler 
+   */
+  private async start(queueName: string, handler: any) {
+    new bull(queueName, {
+      redis: {
+        host: '47.243.92.91', //  
+        port: 6379,
+        password: '4d1ecc8ef3e8290',
+        db: 5,
+      },
+    }).process(10, async (job) => {
+      // note 
+
+      try {
+        const nextJob = await this.handle(handler, job.data);
+
+        if (nextJob === undefined) {
+          return;
+        }
+
+        
+        if (nextJob.name === queueName) {
+          console.log('same queue');
+          return;
+        }
+
+    
+        await this.addJob(nextJob.name, nextJob.params);
+      } catch (err) {
+        console.error(err);
+      }
+
+      return { ok: true };
+    });
+    console.log(`${queueName} handler is running`);
+  }
+
+  private async addJob(queueName: string, params: any): Promise<void> {
+    const queue = new bull(queueName, {
+      redis: {
+        host: '47.243.92.91', // redis 连接
+        port: 6379,
+        password: '4d1ecc8ef3e8290',
+        db: 5,
+      },
+    });
+    const job = await queue.add(params, {
+      timeout: 60 * 60 * 1000,
+      removeOnFail: true,
     });
   }
 }
+
+// should be a global value  todo
+export let localHandeNameSet = new Set<string>('');

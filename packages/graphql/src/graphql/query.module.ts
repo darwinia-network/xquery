@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../database/database.module';
-import { QueryService } from './graphql.service';
+import { QueryService } from './query.service';
 import { SchemaBuilderService } from './schemaBuilder.service';
 @Module({
   imports: [DatabaseModule],

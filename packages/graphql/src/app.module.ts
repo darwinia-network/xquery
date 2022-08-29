@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigModule } from '@nestjs/config';
-import { graphqlModule } from './graphql/graphql.module';
+import { graphqlModule } from './graphql/query.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
