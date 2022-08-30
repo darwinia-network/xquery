@@ -13,6 +13,8 @@ export type NodehandlerMap<K extends HandlerKind, F = Function> = {
   file: string;
 };
 
+export let queueName: string[] = [];
+
 export class Handlers {
   entryCfg: NodehandlerMap<HandlerKind.Entry>[] = [];
   handlerCfg: NodehandlerMap<HandlerKind.Queue>[] = [];
@@ -27,6 +29,7 @@ export class Handlers {
       const handlers = require(`${normalizedPath}/` + file);
 
       const handlerFileName = file.split('.')[0];
+      queueName.push(handlerFileName);
       handlerCfg.push({
         kind: HandlerKind.Queue,
         handler: handlers.handle,

@@ -1,7 +1,7 @@
 /**
  * source chain produce cross chain message
  */
-import { AddJobCallback } from '../../node/src/entry/types';
+import { AddJobCallback } from '../../node/src/types';
 export async function asource(done: AddJobCallback) {
   console.log('this is asource message');
 

@@ -3,7 +3,7 @@ import fs from 'fs';
 import { Handlers } from './handlers';
 @Global()
 @Module({})
-export class ConfigureModule {
+export class EntranceModule {
   // use logger todo
   /**
    * Fetching target handlers from Developer project then dispache  them into
@@ -23,7 +23,7 @@ export class ConfigureModule {
     };
 
     return {
-      module: ConfigureModule,
+      module: EntranceModule,
       providers: [
         {
           provide: Handlers,

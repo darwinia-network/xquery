@@ -12,7 +12,7 @@ import { DatabaseModule } from './database/database.module';
       },
     }),
     ConfigModule.forRoot({
-      envFilePath: [`.env`],
+      envFilePath: ['.env'],
       isGlobal: true,
     }),
     DatabaseModule,

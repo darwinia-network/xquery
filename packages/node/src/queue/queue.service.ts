@@ -1,18 +1,22 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';=
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import bull from 'bull';
 import { Handlers } from '../configure/handlers';
+import { InjectQueue } from '@nestjs/bull';
+
+import { bullQueue } from '../types';
 
 @Injectable()
 export class QueueService implements OnModuleInit {
-  constructor(private handlerCfg: Handlers) {}
+  constructor(
+    private handlerCfg: Handlers,
+    @Inject('queue') private queue: bullQueue,
+  ) {}
 
   async onModuleInit() {
-    
     // mapping developer's handler function into queue
     this.handlerCfg.handlerCfg.forEach((item, idx) => {
       this.start(item.file, item.handler);
     });
-
   }
 
   private async handle(handler: any, params: any): Promise<any> {
@@ -26,27 +30,18 @@ export class QueueService implements OnModuleInit {
       }
       return;
     } catch (error) {
-      // todo logger 
-       
+      // todo logger
     }
-
-     
   }
   /**
-   *   
-   * @param queueName 
-   * @param handler 
+   *
+   * @param queueName
+   * @param handler
    */
+
   private async start(queueName: string, handler: any) {
-    new bull(queueName, {
-      redis: {
-        host: '47.243.92.91', //  
-        port: 6379,
-        password: '4d1ecc8ef3e8290',
-        db: 5,
-      },
-    }).process(10, async (job) => {
-      // note 
+    this.queue(queueName).process(10, async (job) => {
+      // note
 
       try {
         const nextJob = await this.handle(handler, job.data);
@@ -55,13 +50,11 @@ export class QueueService implements OnModuleInit {
           return;
         }
 
-        
         if (nextJob.name === queueName) {
           console.log('same queue');
           return;
         }
 
-    
         await this.addJob(nextJob.name, nextJob.params);
       } catch (err) {
         console.error(err);
@@ -73,15 +66,7 @@ export class QueueService implements OnModuleInit {
   }
 
   private async addJob(queueName: string, params: any): Promise<void> {
-    const queue = new bull(queueName, {
-      redis: {
-        host: '47.243.92.91', // redis 连接
-        port: 6379,
-        password: '4d1ecc8ef3e8290',
-        db: 5,
-      },
-    });
-    const job = await queue.add(params, {
+    await this.queue(queueName).add(params, {
       timeout: 60 * 60 * 1000,
       removeOnFail: true,
     });

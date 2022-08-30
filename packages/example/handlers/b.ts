@@ -3,7 +3,7 @@
  * @param data
  */
 export async function handle(data: any): Promise<unknown> {
-  console.log('process data from a queue');
+  console.log('process data from b queue');
 
   return {
     nextHandler: {

@@ -1,18 +1,29 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
 import { QueueService } from './queue.service';
+import { ConfigService } from '@nestjs/config';
+import bull, { Queue } from 'bull';
 
 @Module({
-  imports: [
-    BullModule.forRoot({
-      redis: {
-        host: '47.243.92.91', //
-        port: 6379,
-        password: '4d1ecc8ef3e8290',
-        db: 5,
+  providers: [
+    QueueService,
+    {
+      provide: 'queue',
+      useFactory: (configService: ConfigService) => {
+        return (name: string) => {
+          return new bull(name, {
+            redis: {
+              host: configService.get<string>('REDIS_HOST'), //
+              port: configService.get<number>('REDIS_PORT'),
+              password: configService.get<string>('REDIS_PASSWORD'),
+              db: configService.get<number>('REDIS_DB'),
+            },
+          });
+        };
       },
-    }),
+      inject: [ConfigService],
+    },
   ],
-  providers: [QueueService],
+  exports: ['queue'],
 })
 export class QueueModule {}

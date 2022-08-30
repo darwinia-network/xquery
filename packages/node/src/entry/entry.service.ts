@@ -1,13 +1,27 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import bull from 'bull';
+import {
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+  Inject,
+} from '@nestjs/common';
+
 import { Handlers } from '../configure/handlers';
 import { SchedulerRegistry } from '@nestjs/schedule';
+import { InjectQueue, getQueueToken } from '@nestjs/bull';
+import { add } from 'lodash';
+import { sleep } from '../utils/utils';
+import { threadId } from 'worker_threads';
+import { print } from 'graphql';
+import utils from 'util';
+
+import { bullQueue } from '../types';
 
 @Injectable()
 export class EntryService implements OnModuleInit, OnModuleDestroy {
   constructor(
     private handler: Handlers,
     private schedulerRegistry: SchedulerRegistry,
+    @Inject('queue') private queue: bullQueue,
   ) {}
   onModuleDestroy() {
     try {
@@ -31,14 +45,8 @@ export class EntryService implements OnModuleInit, OnModuleDestroy {
             // execute developer's function
             void (await item.handler(async (queue: string, data: any) => {
               // push data into queue
-              let job = await new bull(queue, {
-                redis: {
-                  host: '47.243.92.91',
-                  port: 6379,
-                  password: '4d1ecc8ef3e8290',
-                  db: 5,
-                },
-              }).add(data);
+              let aqueue = this.queue(queue);
+              await aqueue.add(data);
             })),
           5000,
         ),
