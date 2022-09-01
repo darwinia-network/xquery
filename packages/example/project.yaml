@@ -1,0 +1,37 @@
+
+name: example
+version: 0.0.1
+initDbScript:
+   file: ./db.sh
+
+Producers:
+  handlers:
+    - file: ./src/entry/a2c.ts
+      handler: handle
+      forever: true
+    - file: ./src/entry/c2c.ts
+      handler: handle
+      forever: false
+   
+JobHandlers:
+   handlers: 
+    - file: ./src/handlers/a.ts
+      handler: handle
+      name: a
+    - file: ./src/handlers/b.ts
+      handler: handle 
+      name: b 
+    - file: ./src/handlers/c.ts
+      handler: handle
+      name: c 
+    - file: ./src/handlers/c1.ts
+      handler: handle
+      name: c1 
+    - file: ./src/handlers/c2.ts
+      handler: handle
+      name: c2 
+      
+    
+
+    
+        

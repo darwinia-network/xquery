@@ -1,6 +1,6 @@
 import { Module, Global, DynamicModule } from '@nestjs/common';
 import fs from 'fs';
-import { Handlers } from './handlers';
+import { UserProjectConifg } from './user.projec.config';
 @Global()
 @Module({})
 export class EntranceModule {
@@ -14,23 +14,22 @@ export class EntranceModule {
   public static register(appFile: string): DynamicModule {
     var stat = fs.statSync(appFile);
     if (stat.isDirectory() == false) {
-      console.log('invalidate path');
       process.exit(1);
     }
 
     const h = async () => {
-      return await Handlers.config(appFile);
+      return await UserProjectConifg.parse(appFile);
     };
 
     return {
       module: EntranceModule,
       providers: [
         {
-          provide: Handlers,
+          provide: UserProjectConifg,
           useFactory: h,
         },
       ],
-      exports: [Handlers],
+      exports: [UserProjectConifg],
     };
   }
 }

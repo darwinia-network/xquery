@@ -22,6 +22,7 @@
     "@nestjs/schedule": "^1.0.2",
     "@willsoto/nestjs-prometheus": "^4.4.0",
     "app-module-path": "^2.2.0",
+    "bee-queue": "^1.4.0",
     "bull": "^4.8.5",
     "dayjs": "^1.10.7",
     "eventemitter2": "^6.4.5",
@@ -53,7 +54,8 @@
     "@types/yargs": "^16.0.4",
     "dotenv": "^15.0.1",
     "nodemon": "^2.0.15",
-    "supertest": "^6.2.2"
+    "supertest": "^6.2.2",
+    "yaml": "^2.1.1"
   },
   "files": [
     "/dist",
