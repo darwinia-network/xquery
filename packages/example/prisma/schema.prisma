@@ -1,0 +1,24 @@
+ 
+
+generator client {
+    provider = "prisma-client-js"
+   
+}
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+
+}
+
+
+model A2CMessage{
+    messageId String @id 
+    soureChain String @default("")
+    updateAt DateTime @default(now())
+    deliveredTime String @default("")
+    acceptedHash String @default("")
+    dispatchHash String @default("")
+    deliveredHash String @default("")
+    authorId Int  @unique
+    
+}

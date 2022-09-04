@@ -53,7 +53,7 @@ export class EntryService implements OnModuleInit, OnApplicationShutdown {
         this.runForever(h.handler);
         return;
       }
-
+      console.log('---> ', h.file);
       if (h.handler === undefined) {
         return;
       }

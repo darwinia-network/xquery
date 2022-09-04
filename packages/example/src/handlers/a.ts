@@ -1,23 +1,34 @@
 import { MessageDemo } from '../outer';
-
+import { PrismaClient, A2CMessage } from '@prisma/client';
+import { NextJonHandler } from '../../../node/src/types';
 /**
- * 框架入口处理 用户指定，类型参数不确定？
- * return nextHandler 类型的固定
+ *
+ *
  * @param data
  */
-import { NextJonHandler } from '../../../node/src/types';
-const outer = {
-  name: 'start',
-  age: 999,
-};
-export async function handle(data: any): Promise<NextJonHandler> {
-  console.log('process data from a queue');
 
+const prisma = new PrismaClient();
+
+export async function handle(data: any): Promise<NextJonHandler> {
   let msg = new MessageDemo(data);
   await msg.save();
+  console.log('a queue');
 
-  console.log('outer age ', outer);
+  let t = await prisma.a2CMessage.findUnique({
+    where: {
+      messageId: '1212',
+    },
+  });
 
+  if (t === null) {
+    await prisma.a2CMessage.create({
+      data: {
+        authorId: 10,
+        messageId: '1212',
+        deliveredHash: 'hrthytjtyj',
+      },
+    });
+  }
   return {
     name: 'b', // push message to queue b
     // data

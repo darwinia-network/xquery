@@ -1,1 +1,22 @@
-{}
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init:db": "npx prisma migrate dev --name init",
+    "generate:prisma": "npx prisma generate --schema=./prisma/schema.prisma"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    
+    "prisma": "~4.2.0",
+    "@prisma/client": "~4.2.0",
+    "axios": "^0.27.2",
+    "typescript": "^4.1.3"
+   
+  }
+  
+}
