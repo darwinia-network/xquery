@@ -8,6 +8,8 @@ import {
 
 import { ApolloServer } from 'apollo-server-express';
 
+import { yargsOption } from '../yargs';
+
 @Injectable()
 export class QueryService implements OnModuleInit {
   private readonly logger = new Logger(QueryService.name);
@@ -44,8 +46,7 @@ export class QueryService implements OnModuleInit {
       ApolloServerPluginLandingPageGraphQLPlayground(),
     ];
 
-    //
-    const appoloContext = await this.SchemaBuilerService.buildApollo('public');
+    const appoloContext = await this.SchemaBuilerService.buildApollo(yargsOption.schema);
     appoloContext.plugins = apolloServerPlugins;
     return new ApolloServer(appoloContext);
   }
