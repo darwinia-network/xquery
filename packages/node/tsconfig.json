@@ -6,9 +6,7 @@
     "rootDir": "src",
     "outDir": "./dist"
   },
-  "references": [
-    { "path": "../utils" }
-  ],
+  
   "include": ["src/**/*"],
   "exclude": ["node_modules", "test", "dist"]
 }

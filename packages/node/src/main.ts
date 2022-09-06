@@ -1,20 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-const DEFAULT_PORT = 8001;
+import { yargsOption } from './yargs';
 
 async function bootstrap() {
-  const validate = (x: any) => {
-    const p = parseInt(x);
-    return isNaN(p) ? null : p;
-  };
-
-  //const port = validate(argv.port) ?? DEFAULT_PORT;
-
   try {
+    // update databse_url with schema arg todo
     const app = await NestFactory.create(AppModule);
     await app.init();
-
-    await app.listen(DEFAULT_PORT);
+    const port = process.env.PORT ?? yargsOption.port;
+    await app.listen(port);
   } catch (e) {
     console.log(e);
     process.exit(1);

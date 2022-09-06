@@ -1,8 +1,10 @@
 
 name: example
 version: 0.0.1
-initDbScript:
-   file: ./db.sh
+dbSchema:
+   kind: Prisma
+   file: ./prisma/schema.prisma
+   migrateVersionName: init
 
 Producers:
   handlers:

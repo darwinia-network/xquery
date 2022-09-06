@@ -4,10 +4,15 @@ import path from 'path';
 import yaml from 'yaml';
 
 import { NextJonHandler, AddJobCallback, produceFunc, jobFunc } from '../types';
+import { DefaultDeserializer } from 'v8';
 
 export type FileRoot = {
   path: string;
 };
+
+export enum DataBaseOrmKind {
+  Prisma = 'prisma',
+}
 
 export interface ProduceHandler
   extends HandlerMapping<HandlerKind.Entry, produceFunc> {
@@ -26,9 +31,15 @@ export interface Jobs<H extends JonHandler> extends FileRoot {
   handlers: H[];
 }
 
-export interface DbScript {
-  file?: string;
+export interface DbOrmMap<K extends string> {
+  kind: K;
+  schemaFile?: string;
+  versionName?: string;
 }
+
+export type PrismaOrm = DbOrmMap<DataBaseOrmKind.Prisma>;
+
+export type DbSchema = PrismaOrm | undefined;
 
 export enum HandlerKind {
   Entry = 'entry',
@@ -47,7 +58,7 @@ export class UserProjectConifg {
   appName: string = '';
   rootPath: string = '';
   version: string = '';
-  dbScript: DbScript = {};
+  dbSchema?: DbSchema;
   JobHandler: Jobs<JonHandler> | undefined;
   ProcessHandler: Producers<ProduceHandler> | undefined;
 
@@ -74,9 +85,7 @@ export class UserProjectConifg {
       appName: projectCfg.name,
       rootPath: root,
       version: projectCfg.version,
-      dbScript: {
-        file: await getDbScript(projectCfg),
-      },
+      dbSchema: await getDbScript(root, projectCfg),
       JobHandler: await jobHandler(root, projectCfg),
       ProcessHandler: await producerHandlerr(root, projectCfg),
     };
@@ -132,9 +141,16 @@ async function producerHandlerr(
   return handlers;
 }
 
-async function getDbScript(content: any): Promise<string | undefined> {
-  if (content.initDbScript) {
-    return content.initDbScript.file;
+async function getDbScript(
+  root: string,
+  content: any,
+): Promise<DbSchema | undefined> {
+  if (content.dbSchema) {
+    return {
+      kind: DataBaseOrmKind[content.dbSchema.kind as string],
+      schemaFile: path.resolve(root, content.dbSchema.file),
+      versionName: content.dbSchema.migrateVersionName as string,
+    };
   }
 
   return undefined;

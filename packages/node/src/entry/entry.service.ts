@@ -1,3 +1,4 @@
+import childProcess from 'child_process';
 import {
   Injectable,
   OnApplicationShutdown,
@@ -5,7 +6,10 @@ import {
   Inject,
 } from '@nestjs/common';
 
-import { UserProjectConifg } from '../configure/user.projec.config';
+import {
+  UserProjectConifg,
+  DataBaseOrmKind,
+} from '../configure/user.projec.config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectQueue, getQueueToken } from '@nestjs/bull';
 import { add } from 'lodash';
@@ -48,6 +52,19 @@ export class EntryService implements OnModuleInit, OnApplicationShutdown {
     }
   }
   private async init(): Promise<void> {
+    if (this.userProjectConifg.dbSchema) {
+      try {
+        if (this.userProjectConifg.dbSchema.kind == DataBaseOrmKind.Prisma) {
+          const runCommand = `npx prisma migrate dev --name ${this.userProjectConifg.dbSchema.versionName} --schema ${this.userProjectConifg.dbSchema.schemaFile} `;
+          const result = childProcess.execSync(runCommand).toString();
+          console.log(result);
+        }
+      } catch (e) {
+        // logger
+        console.log(e);
+        throw new Error('failed to init db');
+      }
+    }
     this.userProjectConifg.ProcessHandler?.handlers.forEach(async (h, idx) => {
       if (h.forever) {
         this.runForever(h.handler);
