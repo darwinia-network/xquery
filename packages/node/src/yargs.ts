@@ -1,3 +1,4 @@
+import { boolean } from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
@@ -6,7 +7,7 @@ export const yargsOption = yargs(hideBin(process.argv)).options({
     demandOption: false,
     describe: 'service port',
     type: 'number',
-    default: 6000,
+    default: 5005,
   },
   app: {
     demandOption: true,
@@ -19,5 +20,11 @@ export const yargsOption = yargs(hideBin(process.argv)).options({
     describe: 'postgres schema',
     type: 'string',
     default: 'public',
+  },
+  monitor: {
+    demandOption: false,
+    describe: 'monitor queue',
+    type: 'boolean',
+    default: false,
   },
 }).argv;

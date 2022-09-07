@@ -24,6 +24,7 @@ export class QueryService implements OnModuleInit {
       if (!this.httpAdapterHost) {
         return;
       }
+      this.logger.log('start appolo service');
       this.apolloServer = await this.createAppolo();
       const app = this.httpAdapterHost.httpAdapter.getInstance();
       await this.apolloServer.start();
@@ -33,7 +34,8 @@ export class QueryService implements OnModuleInit {
         cors: true,
       });
     } catch (error) {
-      throw new Error(`create apollo server failed, ${(error as Error).message}`);
+      this.logger.error(`failed to start appolo server, ${(error as Error).message}`);
+      process.exit(1);
     }
   }
 

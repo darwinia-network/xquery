@@ -6,4 +6,4 @@ import { SchemaBuilderService } from './schemaBuilder.service';
   imports: [DatabaseModule],
   providers: [QueryService, SchemaBuilderService],
 })
-export class graphqlModule {}
+export class GraphqlModule {}

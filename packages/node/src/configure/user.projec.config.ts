@@ -4,7 +4,6 @@ import path from 'path';
 import yaml from 'yaml';
 
 import { NextJonHandler, AddJobCallback, produceFunc, jobFunc } from '../types';
-import { DefaultDeserializer } from 'v8';
 
 export type FileRoot = {
   path: string;
@@ -14,8 +13,7 @@ export enum DataBaseOrmKind {
   Prisma = 'prisma',
 }
 
-export interface ProduceHandler
-  extends HandlerMapping<HandlerKind.Entry, produceFunc> {
+export interface ProduceHandler extends HandlerMapping<HandlerKind.Entry, produceFunc> {
   forever: boolean;
 }
 
@@ -91,10 +89,7 @@ export class UserProjectConifg {
     };
   }
 }
-async function jobHandler(
-  root: string,
-  content: any,
-): Promise<Jobs<JonHandler> | undefined> {
+async function jobHandler(root: string, content: any): Promise<Jobs<JonHandler> | undefined> {
   if (content.JobHandlers === undefined) {
     return undefined;
   }
@@ -108,7 +103,7 @@ async function jobHandler(
 
     handlers.handlers.push({
       file: e.file as string,
-      handler: h[e.handler] as jobFunc, // verify function types todo
+      handler: h[e.handler] as jobFunc,
       name: e.name as string,
       kind: HandlerKind.Queue,
     });
@@ -119,7 +114,7 @@ async function jobHandler(
 
 async function producerHandlerr(
   root: string,
-  content: any,
+  content: any
 ): Promise<Producers<ProduceHandler> | undefined> {
   if (content.Producers === undefined) {
     return undefined;
@@ -134,7 +129,7 @@ async function producerHandlerr(
     const h = require(`${file}`);
     handlers.handlers.push({
       file: e.file as string,
-      handler: h[e.handler] as produceFunc, // verify function types todo
+      handler: h[e.handler] as produceFunc,
       forever: (e.forever as boolean) ?? false,
       kind: HandlerKind.Entry,
     });
@@ -143,10 +138,7 @@ async function producerHandlerr(
   return handlers;
 }
 
-async function getDbScript(
-  root: string,
-  content: any,
-): Promise<DbSchema | undefined> {
+async function getDbScript(root: string, content: any): Promise<DbSchema | undefined> {
   if (content.dbSchema) {
     return {
       kind: DataBaseOrmKind[content.dbSchema.kind as string],

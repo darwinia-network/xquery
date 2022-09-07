@@ -6,11 +6,11 @@ import { ConfigService } from '@nestjs/config';
 export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(DatabaseService.name);
   private pgPool: Pool = new Pool({
-    port: this.configService.get<number>('PGPORT'),
-    password: this.configService.get<string>('PGPASSWORD'),
-    user: this.configService.get<string>('PGUSER'),
-    host: this.configService.get<string>('PGHOST'),
-    database: this.configService.get<string>('PGDATABASE'),
+    port: this.configService.get<number>('DB_PORT'),
+    password: this.configService.get<string>('DB_PASSWORD'),
+    user: this.configService.get<string>('DB_USER'),
+    host: this.configService.get<string>('DB_HOST'),
+    database: this.configService.get<string>('DB_DATABASE'),
     ssl: false,
   });
 
@@ -23,6 +23,7 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
+    this.logger.log('get database schema');
     this.pgPool.on('error', (err) => {
       this.logger.error('Unexpected error on idle client', err.message);
     });

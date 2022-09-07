@@ -24,6 +24,7 @@ export class SchemaBuilderService {
 
   async buildSchema(schema: string): Promise<GraphQLSchema> {
     try {
+      this.logger.log('transfer database schema to graphql schema');
       const dbSchema = await this.databaseService.getSchema(schema);
       const graphqlSchema = await createPostGraphQLSchema(this.driver, dbSchema, this.getOptions());
       return graphqlSchema;

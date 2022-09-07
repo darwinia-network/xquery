@@ -9,7 +9,7 @@ import { bullQueue, jobFunc, NextJonHandler } from '../types';
 export class QueueService implements OnModuleInit {
   constructor(
     private userProjectConifg: UserProjectConifg,
-    @Inject('queue') private queue: bullQueue,
+    @Inject('queue') private queue: bullQueue
   ) {}
 
   async onModuleInit() {
@@ -41,7 +41,7 @@ export class QueueService implements OnModuleInit {
   private async start(queueName: string, handler: jobFunc) {
     this.queue(queueName).process(10, async (job) => {
       // note
-      console.log(`call back data ${job.id}`);
+      // console.log(`call back data ${job.id}`);
       try {
         const nextJob = await this.handle(handler, job.data);
 
