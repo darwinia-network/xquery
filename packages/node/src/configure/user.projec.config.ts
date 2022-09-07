@@ -105,6 +105,7 @@ async function jobHandler(
   content.JobHandlers.handlers.forEach((e) => {
     let file = path.resolve(root, e.file);
     const h = require(`${file}`);
+
     handlers.handlers.push({
       file: e.file as string,
       handler: h[e.handler] as jobFunc, // verify function types todo
@@ -129,6 +130,7 @@ async function producerHandlerr(
   };
   content.Producers.handlers.forEach((e) => {
     let file = path.resolve(root, e.file);
+    // note:  Running node by ts-node could compile typescript file from developer project
     const h = require(`${file}`);
     handlers.handlers.push({
       file: e.file as string,

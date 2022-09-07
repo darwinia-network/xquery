@@ -4,7 +4,7 @@ import { yargsOption } from './yargs';
 
 async function bootstrap() {
   try {
-    // update databse_url with schema arg todo
+    //todo: update databse_url with schema arg
     const app = await NestFactory.create(AppModule);
     await app.init();
     const port = process.env.PORT ?? yargsOption.port;

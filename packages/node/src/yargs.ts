@@ -6,13 +6,13 @@ export const yargsOption = yargs(hideBin(process.argv)).options({
     demandOption: false,
     describe: 'service port',
     type: 'number',
-    default: 5000,
+    default: 6000,
   },
   app: {
     demandOption: true,
     describe: 'developer project',
     type: 'string',
-    default: 'app',
+    default: '/app',
   },
   schema: {
     demandOption: false,

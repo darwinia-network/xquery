@@ -11,12 +11,7 @@ import {
   DataBaseOrmKind,
 } from '../configure/user.projec.config';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { InjectQueue, getQueueToken } from '@nestjs/bull';
-import { add } from 'lodash';
 import { sleep } from '../utils/utils';
-import { threadId } from 'worker_threads';
-import { print } from 'graphql';
-import utils from 'util';
 import {} from '../types';
 
 import { bullQueue, produceFunc } from '../types';

@@ -1,10 +1,26 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es2018",
     "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "declaration": true,
+    "inlineSources": true,
+    "baseUrl": ".",
+    "strict": true,
+    "composite": true,
+    "lib": [
+      "esnext",
+      "es2018",
+      "esnext.asynciterable"
+    ],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   
   "include": ["src/**/*"],

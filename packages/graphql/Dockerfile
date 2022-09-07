@@ -12,5 +12,4 @@ ENV NODE_ENV=${NODE_ENV}
 WORKDIR /opt/app
 
 ENTRYPOINT ["npm", "run", "start:prod"]
-
-CMD [ "--port", "5004" ]
+CMD ["-f","/app"]
