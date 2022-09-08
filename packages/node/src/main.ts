@@ -5,7 +5,6 @@ import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   try {
-    //todo: update databse_url with schema arg
     const app = await NestFactory.create(AppModule);
     await app.init();
 

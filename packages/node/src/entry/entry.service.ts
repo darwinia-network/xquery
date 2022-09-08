@@ -46,12 +46,10 @@ export class EntryService implements OnModuleInit, OnApplicationShutdown {
         this.logger.log('migrate user database table');
         if (this.userProjectConifg.dbSchema.kind == DataBaseOrmKind.Prisma) {
           const runCommand = `npx prisma migrate dev --name ${this.userProjectConifg.dbSchema.versionName} --schema ${this.userProjectConifg.dbSchema.schemaFile} `;
-          const result = childProcess.execSync(runCommand).toString();
-          console.log(result);
+          childProcess.execSync(runCommand).toString();
         }
       } catch (e) {
-        // logger
-        console.log(e);
+        this.logger.error(e);
         throw new Error('failed to init database table');
       }
     }
@@ -60,7 +58,7 @@ export class EntryService implements OnModuleInit, OnApplicationShutdown {
         this.runForever(h.handler);
         return;
       }
-      console.log('---> ', h.file);
+
       if (h.handler === undefined) {
         return;
       }

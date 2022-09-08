@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import bull from 'bull';
 import { UserProjectConifg } from '../configure/user.projec.config';
 import { InjectQueue } from '@nestjs/bull';
@@ -7,6 +7,7 @@ import { bullQueue, jobFunc, NextJonHandler } from '../types';
 
 @Injectable()
 export class QueueService implements OnModuleInit {
+  private readonly logger = new Logger(QueueService.name);
   constructor(
     private userProjectConifg: UserProjectConifg,
     @Inject('queue') private queue: bullQueue
@@ -40,8 +41,6 @@ export class QueueService implements OnModuleInit {
 
   private async start(queueName: string, handler: jobFunc) {
     this.queue(queueName).process(10, async (job) => {
-      // note
-      // console.log(`call back data ${job.id}`);
       try {
         const nextJob = await this.handle(handler, job.data);
 
@@ -50,18 +49,18 @@ export class QueueService implements OnModuleInit {
         }
 
         if (nextJob.name === queueName) {
-          console.log('same queue');
+          this.logger.warn('don not support pass data to same worker ');
           return;
         }
 
         await this.addJob(nextJob.name, nextJob.data);
       } catch (err) {
-        console.error(err);
+        this.logger.error(err);
       }
 
       return { ok: true };
     });
-    console.log(`${queueName} handler is running`);
+    this.logger.log(`create ${queueName} worker`);
   }
 
   private async addJob(queueName: string, params: any): Promise<void> {

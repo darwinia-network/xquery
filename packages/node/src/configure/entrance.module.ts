@@ -4,7 +4,6 @@ import { UserProjectConifg } from './user.projec.config';
 @Global()
 @Module({})
 export class EntranceModule {
-  // use logger todo
   /**
    * Fetching target handlers from Developer project then dispache  them into
    * entry and queue service.
