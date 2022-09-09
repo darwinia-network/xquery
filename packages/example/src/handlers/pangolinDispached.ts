@@ -1,4 +1,4 @@
-import { MessageDemo } from '../outer';
+import { MessageDemo } from '../utils';
 import { PrismaClient, A2CMessage } from '@prisma/client';
 import { QueueHandler } from '../../../node/src/types';
 

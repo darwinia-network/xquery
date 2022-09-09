@@ -8,8 +8,8 @@ dbSchema:
 
 dataSource:
   handlers:
-    - file: ./src/entry/crabParachain.ts
-    - file: ./src/entry/pangoroAccepted.ts
+    - file: ./src/dataSource/crabParachain.ts
+    - file: ./src/dataSource/pangoroAccepted.ts
    
 queueHandlers:
    handlers: 

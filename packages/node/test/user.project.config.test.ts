@@ -25,6 +25,8 @@ describe('Load config from user project ', () => {
 
     expect(userProject.appName).toEqual('example');
     expect(userProject.queueHandler?.handlers[0].name).toEqual('pangoroDelivered');
-    expect(userProject.dataSourceHandler?.handlers[0].file).toEqual('./src/entry/crabParachain.ts');
+    expect(userProject.dataSourceHandler?.handlers[0].file).toEqual(
+      './src/dataSource/crabParachain.ts'
+    );
   });
 });

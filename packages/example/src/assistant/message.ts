@@ -9,10 +9,9 @@ export class MessageDemo {
   }
 
   public async save(): Promise<void> {
-    console.log('start save');
     await this.handleLcmpMsg();
   }
   private async handleLcmpMsg() {
-    console.log('customer  Msg', this.data);
+    console.log('customer  data', this.data);
   }
 }
