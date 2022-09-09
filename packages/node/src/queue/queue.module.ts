@@ -1,11 +1,14 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Module } from '@nestjs/common';
-import { QueueService } from './queue.service';
+import { QueueProcess } from './queue.process';
 import { ConfigService } from '@nestjs/config';
 import bull, { Queue } from 'bull';
 
 @Module({
   providers: [
-    QueueService,
+    QueueProcess,
     {
       provide: 'queue',
       useFactory: (configService: ConfigService) => {
@@ -15,7 +18,7 @@ import bull, { Queue } from 'bull';
             redis: {
               host: configService.get<string>('REDIS_HOST'), //
               port: configService.get<number>('REDIS_PORT'),
-              password: configService.get<string>('REDIS_PASSWORD'),
+              password: configService.get<string>('REDIS_PASSWORD') ?? '',
               db: configService.get<number>('REDIS_DB'),
             },
           });

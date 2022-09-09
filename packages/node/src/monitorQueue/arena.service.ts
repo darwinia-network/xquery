@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';

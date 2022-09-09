@@ -1,10 +1,13 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Pool } from 'pg';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class DatabaseService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(DatabaseService.name);
+export class DatabaseOperate implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(DatabaseOperate.name);
   private pgPool: Pool = new Pool({
     port: this.configService.get<number>('DB_PORT'),
     password: this.configService.get<string>('DB_PASSWORD'),

@@ -1,8 +1,10 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { yargsOption } from './yargs';
 import { Logger } from 'nestjs-pino';
-import { application } from 'express';
 
 async function bootstrap() {
   try {

@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import childProcess from 'child_process';
 import { Injectable, OnApplicationShutdown, OnModuleInit, Inject, Logger } from '@nestjs/common';
 
@@ -8,9 +11,9 @@ import { sleep } from '../utils/utils';
 import { BullQueue, DataSourceFunc } from '../types';
 
 @Injectable()
-export class DataSourceService implements OnModuleInit, OnApplicationShutdown {
+export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
   private isShutdown = false;
-  private readonly logger = new Logger(DataSourceService.name);
+  private readonly logger = new Logger(DataSourceProcess.name);
 
   constructor(
     private userProjectConfig: UserProjectConfig,

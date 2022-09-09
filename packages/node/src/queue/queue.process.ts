@@ -1,15 +1,16 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import bull from 'bull';
 import { UserProjectConfig } from '../configure/user.projec.config';
-import { InjectQueue } from '@nestjs/bull';
-
 import { BullQueue, QueueJobFunc, QueueHandler } from '../types';
 
 const concurrentCount = 10;
 
 @Injectable()
-export class QueueService implements OnModuleInit {
-  private readonly logger = new Logger(QueueService.name);
+export class QueueProcess implements OnModuleInit {
+  private readonly logger = new Logger(QueueProcess.name);
   private queueNames: string[] = [];
   constructor(
     private userProjectConfig: UserProjectConfig,
@@ -66,7 +67,7 @@ export class QueueService implements OnModuleInit {
     this.logger.log(`create ${queueName} worker`);
   }
 
-  private async addJob(queueName: string, data: unknown): Promise<void> {
+  async addJob(queueName: string, data: unknown): Promise<void> {
     await this.queue(queueName).add(data, {
       timeout: 60 * 60 * 1000,
       removeOnFail: true,

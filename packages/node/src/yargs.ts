@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 

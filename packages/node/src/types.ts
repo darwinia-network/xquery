@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Queue } from 'bull';
 export type IntoQueueCallback = (queueName?: string | undefined, data?: unknown) => void;
 export type BullQueue = (name: string) => Queue;

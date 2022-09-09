@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Module, Global, DynamicModule } from '@nestjs/common';
 import fs from 'fs';
 import { UserProjectConfig } from './user.projec.config';

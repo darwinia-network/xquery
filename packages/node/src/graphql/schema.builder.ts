@@ -1,16 +1,19 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Injectable, Logger } from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { Pool } from 'pg';
 import { createPostGraphQLSchema, PostGraphileOptions } from 'postgraphile';
-import { DatabaseService } from '../database/database.service';
+import { DatabaseOperate } from '../database/database.operate';
 import { plugins } from './plugins';
 
 @Injectable()
-export class SchemaBuilderService {
-  private readonly logger = new Logger(SchemaBuilderService.name);
+export class SchemaBuilder {
+  private readonly logger = new Logger(SchemaBuilder.name);
 
   private driver: Pool;
-  constructor(public databaseService: DatabaseService) {
+  constructor(public databaseService: DatabaseOperate) {
     this.driver = this.databaseService.getPgPool();
   }
   getOptions(): PostGraphileOptions {

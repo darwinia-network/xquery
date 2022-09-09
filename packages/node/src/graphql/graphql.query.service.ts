@@ -1,6 +1,9 @@
+// Copyright 2021-2022 Darwinia Network authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { SchemaBuilderService } from './schemaBuilder.service';
+import { SchemaBuilder } from './schema.builder';
 import {
   ApolloServerPluginCacheControl,
   ApolloServerPluginLandingPageGraphQLPlayground,
@@ -15,7 +18,7 @@ export class GraphqlQueryService implements OnModuleInit {
   private readonly logger = new Logger(GraphqlQueryService.name);
   private apolloServer: ApolloServer | undefined;
   constructor(
-    public SchemaBuilerService: SchemaBuilderService,
+    public SchemaBuilerService: SchemaBuilder,
     private readonly httpAdapterHost: HttpAdapterHost
   ) {}
 
