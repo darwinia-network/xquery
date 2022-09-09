@@ -14,10 +14,10 @@ import Bull from 'bull';
 const queueURIPath = '/queue';
 
 @Injectable()
-export class AreanService implements OnModuleInit {
+export class MonitorQueueService implements OnModuleInit {
   private readonly options: ArenaOptions = { queues: [], listenOptions: {} };
 
-  private readonly logger = new Logger(AreanService.name);
+  private readonly logger = new Logger(MonitorQueueService.name);
 
   constructor(
     private readonly httpAdapterHost: HttpAdapterHost,

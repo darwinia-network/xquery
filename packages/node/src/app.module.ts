@@ -10,7 +10,6 @@ import { DataSourceModule } from './dataSource/datasource.module';
 import { UserProjectModule } from './configure/user.project.module';
 import { DatabaseModule } from './database/database.module';
 import { GraphqlModule } from './graphql/graphql.module';
-import { ArenaModule } from './monitorQueue/arena.module';
 import { yargsOption } from './yargs';
 
 @Module({
@@ -28,7 +27,7 @@ import { yargsOption } from './yargs';
         level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
       },
     }),
-    ArenaModule,
+
     DataSourceModule,
     QueueModule,
     DatabaseModule,

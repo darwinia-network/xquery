@@ -5,9 +5,11 @@ import { Module } from '@nestjs/common';
 import { QueueProcess } from './queue.process';
 import { ConfigService } from '@nestjs/config';
 import bull, { Queue } from 'bull';
+import { MonitorQueueService } from './monitor.queue.service';
 
 @Module({
   providers: [
+    MonitorQueueService,
     QueueProcess,
     {
       provide: 'queue',
