@@ -4,7 +4,7 @@ export async function fetch(
   url: string | undefined,
   queryStr: string,
   field: string
-): Promise<any> {
+): Promise<unknown> {
   if (url === undefined) {
     return undefined;
   }

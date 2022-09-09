@@ -1,9 +1,13 @@
 import fs from 'fs';
-import util from 'util';
 import path from 'path';
 import yaml from 'yaml';
 
-import { NextJonHandler, AddJobCallback, produceFunc, jobFunc } from '../types';
+import { DataSourceFunc, QueueJobFunc } from '../types';
+
+// the export 'handle' function from user project
+const handle = 'handle';
+// user project config file name
+const manifest = 'project.yaml';
 
 export type FileRoot = {
   path: string;
@@ -13,19 +17,19 @@ export enum DataBaseOrmKind {
   Prisma = 'prisma',
 }
 
-export interface ProduceHandler extends HandlerMapping<HandlerKind.Entry, produceFunc> {
+export interface DataSourceHandler extends HandlerMapping<HandlerKind.DataSource, DataSourceFunc> {
   forever: boolean;
 }
 
-export interface Producers<H extends ProduceHandler> extends FileRoot {
+export interface DataSource<H extends DataSourceHandler> extends FileRoot {
   handlers: H[];
 }
 
-export interface JonHandler extends HandlerMapping<HandlerKind.Queue, jobFunc> {
+export interface JonHandler extends HandlerMapping<HandlerKind.Queue, QueueJobFunc> {
   name: string;
 }
 
-export interface Jobs<H extends JonHandler> extends FileRoot {
+export interface Queue<H extends JonHandler> extends FileRoot {
   handlers: H[];
 }
 
@@ -40,7 +44,7 @@ export type PrismaOrm = DbOrmMap<DataBaseOrmKind.Prisma>;
 export type DbSchema = PrismaOrm | undefined;
 
 export enum HandlerKind {
-  Entry = 'entry',
+  DataSource = 'dataSource',
   Queue = 'queue',
 }
 
@@ -50,17 +54,15 @@ export type HandlerMapping<K extends HandlerKind, F = Function> = {
   file: string;
 };
 
-const manifest = 'project.yaml';
-
-export class UserProjectConifg {
+export class UserProjectConfig {
   appName: string = '';
   rootPath: string = '';
   version: string = '';
   dbSchema?: DbSchema;
-  JobHandler: Jobs<JonHandler> | undefined;
-  ProcessHandler: Producers<ProduceHandler> | undefined;
+  queueHandler: Queue<JonHandler> | undefined;
+  dataSourceHandler: DataSource<DataSourceHandler> | undefined;
 
-  static async parse(app: string): Promise<UserProjectConifg> {
+  static async parse(app: string): Promise<UserProjectConfig> {
     if (fs.existsSync(app) == false) {
       throw new Error(`can't find user project file ${path}`);
     }
@@ -68,7 +70,7 @@ export class UserProjectConifg {
     const fsState = fs.statSync(app);
 
     if (fsState.isDirectory() == false) {
-      throw new Error(`unknow project dir ${app}`);
+      throw new Error(`unknown project folder ${app}`);
     }
 
     let root = path.resolve(app);
@@ -76,35 +78,39 @@ export class UserProjectConifg {
 
     let projectCfg = yaml.parse(fs.readFileSync(manifestFile, 'utf-8'));
     if (projectCfg === undefined) {
-      throw new Error(`parse project cfg failed ${projectCfg}`);
+      throw new Error(`failed to load config ${projectCfg}`);
     }
 
     return {
       appName: projectCfg.name,
       rootPath: root,
       version: projectCfg.version,
-      dbSchema: await getDbScript(root, projectCfg),
-      JobHandler: await jobHandler(root, projectCfg),
-      ProcessHandler: await producerHandlerr(root, projectCfg),
+      dbSchema: await dbSchema(root, projectCfg),
+      queueHandler: await queueHandler(root, projectCfg),
+      dataSourceHandler: await dataSourceHandlerr(root, projectCfg),
     };
   }
 }
-async function jobHandler(root: string, content: any): Promise<Jobs<JonHandler> | undefined> {
-  if (content.JobHandlers === undefined) {
+async function queueHandler(root: string, content: any): Promise<Queue<JonHandler> | undefined> {
+  if (content.queueHandlers === undefined) {
     return undefined;
   }
-  let handlers: Jobs<JonHandler> = {
+  let handlers: Queue<JonHandler> = {
     handlers: [],
     path: root,
   };
-  content.JobHandlers.handlers.forEach((e) => {
+
+  content.queueHandlers.handlers.forEach((e) => {
     let file = path.resolve(root, e.file);
     const h = require(`${file}`);
 
+    let queueName = path.basename(file);
+    queueName = queueName.substring(0, queueName.lastIndexOf('.'));
+
     handlers.handlers.push({
-      file: e.file as string,
-      handler: h[e.handler] as jobFunc,
-      name: e.name as string,
+      file: e.file as unknown as string,
+      handler: h[handle] as unknown as QueueJobFunc,
+      name: queueName,
       kind: HandlerKind.Queue,
     });
   });
@@ -112,38 +118,37 @@ async function jobHandler(root: string, content: any): Promise<Jobs<JonHandler> 
   return handlers;
 }
 
-async function producerHandlerr(
+async function dataSourceHandlerr(
   root: string,
   content: any
-): Promise<Producers<ProduceHandler> | undefined> {
-  if (content.Producers === undefined) {
+): Promise<DataSource<DataSourceHandler> | undefined> {
+  if (content.dataSource === undefined) {
     return undefined;
   }
-  let handlers: Producers<ProduceHandler> = {
+  let handlers: DataSource<DataSourceHandler> = {
     handlers: [],
     path: root,
   };
-  content.Producers.handlers.forEach((e) => {
+  content.dataSource.handlers.forEach((e) => {
     let file = path.resolve(root, e.file);
-    // note:  Running node by ts-node could compile typescript file from developer project
     const h = require(`${file}`);
     handlers.handlers.push({
-      file: e.file as string,
-      handler: h[e.handler] as produceFunc,
-      forever: (e.forever as boolean) ?? false,
-      kind: HandlerKind.Entry,
+      file: e.file as unknown as string,
+      handler: h[handle] as unknown as DataSourceFunc,
+      kind: HandlerKind.DataSource,
+      forever: true,
     });
   });
 
   return handlers;
 }
 
-async function getDbScript(root: string, content: any): Promise<DbSchema | undefined> {
+async function dbSchema(root: string, content: any): Promise<DbSchema | undefined> {
   if (content.dbSchema) {
     return {
-      kind: DataBaseOrmKind[content.dbSchema.kind as string],
+      kind: DataBaseOrmKind[content.dbSchema.kind as unknown as string],
       schemaFile: path.resolve(root, content.dbSchema.file),
-      versionName: content.dbSchema.migrateVersionName as string,
+      versionName: content.dbSchema.migrateVersionName as unknown as string,
     };
   }
 

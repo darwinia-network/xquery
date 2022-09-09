@@ -1,17 +1,17 @@
 import { Queue } from 'bull';
-export type AddJobCallback = (handleJobName?: string | undefined, data?: any) => void;
-export type bullQueue = (name: string) => Queue;
+export type IntoQueueCallback = (queueName?: string | undefined, data?: unknown) => void;
+export type BullQueue = (name: string) => Queue;
 
-export type NextJonHandler =
+export type QueueHandler =
   | {
-      name: string;
+      queueName: string;
       data: unknown;
     }
   | undefined;
 
-export type produceFunc = (done: AddJobCallback) => void;
+export type DataSourceFunc = (done: IntoQueueCallback) => void;
 
-export type jobFunc = (data: unknown) => Promise<NextJonHandler>;
+export type QueueJobFunc = (data: unknown) => Promise<QueueHandler>;
 
 interface QueueOptions {
   name: string;

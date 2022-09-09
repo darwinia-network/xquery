@@ -34,7 +34,7 @@ export class SchemaBuilderService {
     }
   }
 
-  async buildApollo(schema: string): Promise<Record<string, unknown>> {
+  async buildAppolo(schema: string): Promise<Record<string, unknown>> {
     return {
       schema: await this.buildSchema(schema),
       playground: true,

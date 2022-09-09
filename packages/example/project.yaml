@@ -6,32 +6,17 @@ dbSchema:
    file: ./prisma/schema.prisma
    migrateVersionName: init
 
-Producers:
+dataSource:
   handlers:
-    - file: ./src/entry/a2c.ts
-      handler: handle
-      forever: true
-    - file: ./src/entry/c2c.ts
-      handler: handle
-      forever: false
+    - file: ./src/entry/crabParachain.ts
+    - file: ./src/entry/pangoroAccepted.ts
    
-JobHandlers:
+queueHandlers:
    handlers: 
-    - file: ./src/handlers/a.ts
-      handler: handle
-      name: a
-    - file: ./src/handlers/b.ts
-      handler: handle 
-      name: b 
-    - file: ./src/handlers/c.ts
-      handler: handle
-      name: c 
-    - file: ./src/handlers/c1.ts
-      handler: handle
-      name: c1 
-    - file: ./src/handlers/c2.ts
-      handler: handle
-      name: c2 
+    - file: ./src/handlers/pangoroDelivered.ts
+    - file: ./src/handlers/pangolinDispached.ts
+    - file: ./src/handlers/karura.ts
+    - file: ./src/handlers/kusama.ts
       
     
 

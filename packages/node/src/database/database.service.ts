@@ -11,7 +11,6 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     user: this.configService.get<string>('DB_USER'),
     host: this.configService.get<string>('DB_HOST'),
     database: this.configService.get<string>('DB_DATABASE'),
-    ssl: false,
   });
 
   constructor(public configService: ConfigService) {}
@@ -23,11 +22,10 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    this.logger.log('get database schema');
     this.pgPool.on('error', (err) => {
       this.logger.error('Unexpected error on idle client', err.message);
     });
-    this.logger.log('database service initilize');
+    this.logger.log('Init database service');
   }
 
   async getSchema(name: string): Promise<string> {

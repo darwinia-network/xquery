@@ -1,9 +1,9 @@
-import { AddJobCallback } from '../../../node/src/types';
+import { IntoQueueCallback } from '../../../node/src/types';
 
 /*
  Trace  and record  XCMP cross-chain message from crab parachain to karura
 */
-export async function handle(done: AddJobCallback) {
+export async function handle(done: IntoQueueCallback) {
   console.log('crab parachain');
 
   // 1 find cross-chain message on crab parachain

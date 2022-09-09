@@ -1,10 +1,10 @@
-import { AddJobCallback } from '../../../node/src/types';
+import { IntoQueueCallback } from '../../../node/src/types';
 import { PrismaClient, A2CMessage } from '@prisma/client';
 /*
   Trace  and record  LCMP cross-chain message from pangoro to pangolin
 
 */
-export async function handle(done: AddJobCallback) {
+export async function handle(done: IntoQueueCallback) {
   console.log('pangoro accepted message');
 
   // 1 find cross-chain message on pangoro

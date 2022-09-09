@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bull';
 import { QueueService } from './queue.service';
 import { ConfigService } from '@nestjs/config';
 import bull, { Queue } from 'bull';
@@ -11,6 +10,7 @@ import bull, { Queue } from 'bull';
       provide: 'queue',
       useFactory: (configService: ConfigService) => {
         return (name: string) => {
+          // here we store queue data in redis
           return new bull(name, {
             redis: {
               host: configService.get<string>('REDIS_HOST'), //

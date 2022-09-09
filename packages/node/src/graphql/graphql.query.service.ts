@@ -11,8 +11,8 @@ import { ApolloServer } from 'apollo-server-express';
 import { yargsOption } from '../yargs';
 
 @Injectable()
-export class QueryService implements OnModuleInit {
-  private readonly logger = new Logger(QueryService.name);
+export class GraphqlQueryService implements OnModuleInit {
+  private readonly logger = new Logger(GraphqlQueryService.name);
   private apolloServer: ApolloServer | undefined;
   constructor(
     public SchemaBuilerService: SchemaBuilderService,
@@ -48,7 +48,7 @@ export class QueryService implements OnModuleInit {
       ApolloServerPluginLandingPageGraphQLPlayground(),
     ];
 
-    const appoloContext = await this.SchemaBuilerService.buildApollo(yargsOption.schema);
+    const appoloContext = await this.SchemaBuilerService.buildAppolo(yargsOption.schema);
     appoloContext.plugins = apolloServerPlugins;
     return new ApolloServer(appoloContext);
   }

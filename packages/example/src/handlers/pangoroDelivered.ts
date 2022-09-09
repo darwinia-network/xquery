@@ -3,9 +3,9 @@
  * @param data
  */
 
-import { NextJonHandler } from '../../../node/src/types';
+import { QueueHandler } from '../../../node/src/types';
 
-export async function handle(data: any): Promise<NextJonHandler> {
+export async function handle(data: any): Promise<QueueHandler> {
   console.log('handle pangolinDispached data from pangoroDelivered queue');
 
   // 1 find related cross-chain message on pangolin according to pangolin dispached data

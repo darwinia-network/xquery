@@ -3,18 +3,18 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { QueueModule } from './queue/queue.module';
-import { EntryModule } from './entry/entry.module';
-import { EntranceModule } from './configure/entrance.module';
+import { DataSourceModule } from './dataSource/datasource.module';
+import { UserProjectModule } from './configure/user.project.module';
 import { DatabaseModule } from './database/database.module';
-import { GraphqlModule } from './graphql/query.module';
-import { ArenaModule } from './monitor/arena.module';
+import { GraphqlModule } from './graphql/graphql.module';
+import { ArenaModule } from './monitorQueue/arena.module';
 import { yargsOption } from './yargs';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
     //
-    EntranceModule.register(yargsOption.app),
+    UserProjectModule.register(yargsOption.app),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', `.env.${process.env.NODE_ENV || 'prod'}`],
@@ -26,7 +26,7 @@ import { yargsOption } from './yargs';
       },
     }),
     ArenaModule,
-    EntryModule,
+    DataSourceModule,
     QueueModule,
     DatabaseModule,
     GraphqlModule,

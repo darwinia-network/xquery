@@ -1,75 +1,75 @@
 import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import bull from 'bull';
-import { UserProjectConifg } from '../configure/user.projec.config';
+import { UserProjectConfig } from '../configure/user.projec.config';
 import { InjectQueue } from '@nestjs/bull';
 
-import { bullQueue, jobFunc, NextJonHandler } from '../types';
+import { BullQueue, QueueJobFunc, QueueHandler } from '../types';
+
+const concurrentCount = 10;
 
 @Injectable()
 export class QueueService implements OnModuleInit {
   private readonly logger = new Logger(QueueService.name);
+  private queueNames: string[] = [];
   constructor(
-    private userProjectConifg: UserProjectConifg,
-    @Inject('queue') private queue: bullQueue
+    private userProjectConfig: UserProjectConfig,
+    @Inject('queue') private queue: BullQueue
   ) {}
 
   async onModuleInit() {
-    this.userProjectConifg.JobHandler?.handlers.forEach((h, idx) => {
+    this.userProjectConfig.queueHandler?.handlers.forEach((h, _) => {
+      this.queueNames.push(h.name);
       this.start(h.name, h.handler);
     });
   }
 
-  private async handle(handler: jobFunc, params: any): Promise<NextJonHandler> {
+  private async handle(handler: QueueJobFunc, params: any): Promise<QueueHandler> {
     try {
       let result = await handler(params);
-      if (result && result?.name) {
+      if (result && result?.queueName) {
         return {
-          name: result.name,
+          queueName: result.queueName,
           data: result.data || {},
         };
       }
-      return;
     } catch (error) {
-      // todo logger
+      this.logger.error(`queue process data error ${error}`);
+      throw new Error((error as Error).message);
     }
   }
-  /**
-   *
-   * @param queueName
-   * @param handler
-   */
 
-  private async start(queueName: string, handler: jobFunc) {
-    this.queue(queueName).process(10, async (job) => {
+  private async start(queueName: string, handler: QueueJobFunc) {
+    this.queue(queueName).process(concurrentCount, async (job) => {
       try {
-        const nextJob = await this.handle(handler, job.data);
+        const nextHandle = await this.handle(handler, job.data);
 
-        if (nextJob === undefined) {
+        if (nextHandle === undefined) {
           return;
         }
 
-        if (nextJob.name === queueName) {
-          this.logger.warn('don not support pass data to same worker ');
+        if (this.queueNames.includes(nextHandle.queueName) == false) {
+          this.logger.error(
+            `unkown worker ${nextHandle.queueName}, please check your handler file`
+          );
           return;
         }
-
-        await this.addJob(nextJob.name, nextJob.data);
+        if (nextHandle.queueName === queueName) {
+          this.logger.error(`ignore putting data to same worker ${nextHandle.queueName}`);
+          return;
+        }
+        if (nextHandle.queueName) await this.addJob(nextHandle.queueName, nextHandle.data);
       } catch (err) {
         this.logger.error(err);
+        throw new Error((err as Error).message);
       }
-
-      return { ok: true };
     });
     this.logger.log(`create ${queueName} worker`);
   }
 
-  private async addJob(queueName: string, params: any): Promise<void> {
-    await this.queue(queueName).add(params, {
+  private async addJob(queueName: string, data: unknown): Promise<void> {
+    await this.queue(queueName).add(data, {
       timeout: 60 * 60 * 1000,
       removeOnFail: true,
     });
   }
 }
-
-// should be a global value  todo
-export let localHandeNameSet = new Set<string>('');

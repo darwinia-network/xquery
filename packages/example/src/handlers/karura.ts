@@ -1,6 +1,6 @@
-import { NextJonHandler } from '../../../node/src/types';
+import { QueueHandler } from '../../../node/src/types';
 
-export async function handle(data: any): Promise<NextJonHandler> {
+export async function handle(data: any): Promise<QueueHandler> {
   console.log('handle kusama data from karura queue');
 
   // find related cross-chain message on karura according to kusama data

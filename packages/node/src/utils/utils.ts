@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export async function fetch(
+export async function fetchGraphqlData(
   url: string | undefined,
   queryStr: string,
-  field: string,
+  field: string
 ): Promise<any> {
   if (url === undefined) {
     return undefined;
@@ -11,9 +11,10 @@ export async function fetch(
   try {
     let resp = await axios.post(url, { query: queryStr });
 
+    // graphql querying response
     return resp.data?.data?.query[field];
   } catch (error) {
-    return error;
+    throw new Error((error as Error).message);
   }
 }
 

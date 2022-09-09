@@ -1,6 +1,6 @@
 import { MessageDemo } from '../outer';
 import { PrismaClient, A2CMessage } from '@prisma/client';
-import { NextJonHandler } from '../../../node/src/types';
+import { QueueHandler } from '../../../node/src/types';
 
 /**
  *
@@ -8,7 +8,7 @@ import { NextJonHandler } from '../../../node/src/types';
 
 const prisma = new PrismaClient();
 
-export async function handle(data: any): Promise<NextJonHandler> {
+export async function handle(data: any): Promise<QueueHandler> {
   //
   // let msg = new MessageDemo(data);
   // await msg.save();
@@ -35,7 +35,7 @@ export async function handle(data: any): Promise<NextJonHandler> {
 
   // 3 put pangolin dispached messsage into pangoroDelivered queue
   return {
-    name: 'pangoroDelivered',
+    queueName: 'pangoroDelivered',
     data: {
       messageId: data.messageId,
     },
