@@ -2,6 +2,53 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Queue } from 'bull';
+
+export type FileRoot = {
+  path: string;
+};
+
+export enum DataBaseOrmKind {
+  Prisma = 'prisma',
+}
+
+export interface DataSourceHandler extends HandlerMapping<HandlerKind.DataSource, DataSourceFunc> {
+  forever: boolean;
+}
+
+export interface DataSource<H extends DataSourceHandler> extends FileRoot {
+  handlers: H[];
+}
+
+export interface JonHandler extends HandlerMapping<HandlerKind.Queue, QueueJobFunc> {
+  name: string;
+}
+
+export interface QueueProcess<H extends JonHandler> extends FileRoot {
+  handlers: H[];
+}
+
+export interface DbOrmMap<K extends string> {
+  kind: K;
+  schemaFile?: string;
+  versionName?: string;
+}
+
+export type PrismaOrm = DbOrmMap<DataBaseOrmKind.Prisma>;
+
+export type DbSchema = PrismaOrm | undefined;
+
+export enum HandlerKind {
+  DataSource = 'dataSource',
+  Queue = 'queue',
+}
+
+/* eslint-disable-next-line @typescript-eslint/ban-types */
+export type HandlerMapping<K extends HandlerKind, F = Function> = {
+  kind: K;
+  handler: F;
+  file: string;
+};
+
 export type IntoQueueCallback = (queueName?: string | undefined, data?: unknown) => void;
 export type BullQueue = (name: string) => Queue;
 

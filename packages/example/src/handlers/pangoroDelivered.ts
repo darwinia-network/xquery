@@ -3,7 +3,7 @@
  * @param data
  */
 
-import { QueueHandler } from '../../../node/src/types';
+import { QueueHandler } from '@xquery/types';
 
 export async function handle(data: any): Promise<QueueHandler> {
   console.log('handle pangolinDispached data from pangoroDelivered queue');

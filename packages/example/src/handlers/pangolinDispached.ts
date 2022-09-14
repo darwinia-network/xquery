@@ -1,6 +1,5 @@
-import { MessageDemo } from '../utils';
 import { PrismaClient, A2CMessage } from '@prisma/client';
-import { QueueHandler } from '../../../node/src/types';
+import { QueueHandler } from '@xquery/types';
 
 /**
  *

@@ -8,7 +8,7 @@ import { UserProjectConfig } from './user.projec.config';
 @Module({})
 export class UserProjectModule {
   public static register(appFile: string): DynamicModule {
-    var stat = fs.statSync(appFile);
+    const stat = fs.statSync(appFile);
     if (stat.isDirectory() == false) {
       process.exit(1);
     }

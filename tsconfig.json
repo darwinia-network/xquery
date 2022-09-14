@@ -4,6 +4,7 @@
     "target": "es2018",
     "noImplicitAny": false,
     "noImplicitThis": true,
+    "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
     "inlineSources": true,
@@ -20,9 +21,16 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@xquery/types":["types/src"], 
+      "@xquery/types/*":["types/src/*"]
+    }
   },
-  "include": ["packages/**/*", "jest.config.js"],
-  "exclude": ["**/node_modules/**"],
+  "references": [
+    {"path":"./packages/types/tsconfig.json"}
+  ],
+  "include": ["packages/node/*", "packages/types/*", "jest.config.js"],
+  "exclude": ["**/node_modules/**" ],
   "typeRoots":["./node_modules/@types"]
 }

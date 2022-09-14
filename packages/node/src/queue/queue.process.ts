@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import bull from 'bull';
+
 import { UserProjectConfig } from '../configure/user.projec.config';
-import { BullQueue, QueueJobFunc, QueueHandler } from '../types';
+import { BullQueue, QueueJobFunc, QueueHandler } from '@xquery/types/src';
 
 const concurrentCount = 10;
 
@@ -18,7 +18,7 @@ export class QueueProcess implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    this.userProjectConfig.queueHandler?.handlers.forEach((h, _) => {
+    this.userProjectConfig.queueHandler?.handlers.forEach((h) => {
       this.queueNames.push(h.name);
       this.start(h.name, h.handler);
     });
@@ -26,7 +26,7 @@ export class QueueProcess implements OnModuleInit {
 
   private async handle(handler: QueueJobFunc, params: any): Promise<QueueHandler> {
     try {
-      let result = await handler(params);
+      const result = await handler(params);
       if (result && result?.queueName) {
         return {
           queueName: result.queueName,

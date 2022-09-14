@@ -4,11 +4,10 @@
 import childProcess from 'child_process';
 import { Injectable, OnApplicationShutdown, OnModuleInit, Inject, Logger } from '@nestjs/common';
 
-import { UserProjectConfig, DataBaseOrmKind } from '../configure/user.projec.config';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { UserProjectConfig } from '../configure/user.projec.config';
 import { sleep } from '../utils/utils';
 
-import { BullQueue, DataSourceFunc } from '../types';
+import { BullQueue, DataSourceFunc, DataBaseOrmKind } from '@xquery/types/src';
 
 @Injectable()
 export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
@@ -35,7 +34,7 @@ export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
         if (queueName === undefined) {
           return;
         }
-        let queue = this.queue(queueName);
+        const queue = this.queue(queueName);
         await queue.add(data, {
           timeout: 60 * 60 * 1000,
           removeOnFail: true,
@@ -58,7 +57,7 @@ export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
         throw new Error('failed to migrate database table');
       }
     }
-    this.userProjectConfig.dataSourceHandler?.handlers.forEach(async (h, _) => {
+    this.userProjectConfig.dataSourceHandler?.handlers.forEach(async (h) => {
       if (h.handler === undefined) {
         return;
       }
@@ -72,7 +71,7 @@ export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
         if (queueName === undefined) {
           return;
         }
-        let queue = this.queue(queueName);
+        const queue = this.queue(queueName);
         await queue.add(data, {
           timeout: 60 * 60 * 1000,
           removeOnFail: true,

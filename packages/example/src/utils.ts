@@ -9,7 +9,7 @@ export async function fetch(
     return undefined;
   }
   try {
-    let resp = await axios.post(url, { query: queryStr });
+    const resp = await axios.post(url, { query: queryStr });
 
     return resp.data?.data?.query[field];
   } catch (error) {

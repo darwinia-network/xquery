@@ -1,0 +1,16 @@
+{
+  "name": "@xquery/types",
+  "version": "0.1.1",
+  "description": "",
+  "author": "wayne",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/darwinia-network/xquery",
+  "repository": "github.com:darwinia-network/xquery",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && tsc -b"
+  },
+  "devDependencies": {
+    "bull": "^4.8.5"
+  }
+}

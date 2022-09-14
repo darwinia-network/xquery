@@ -1,17 +1,13 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
+    "noImplicitAny": true,
     "outDir": "dist",
-    "strict": true,
-    "lib": [
-      "esnext",
-      "es2018",
-      "esnext.asynciterable"
-    ],
-    "esModuleInterop": true,
-    "target": "es2018",
-    "module": "commonjs",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+  
   },
+   "references": [{
+    "path": "../types/tsconfig.build.json"
+  }],
+  
+ 
 }

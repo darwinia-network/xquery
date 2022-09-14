@@ -5,7 +5,7 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
-import { ArenaOptions } from '../types';
+import { ArenaOptions } from '@xquery/types/src';
 import { UserProjectConfig } from '../configure/user.projec.config';
 import { yargsOption } from '../yargs';
 import Arena from 'bull-arena';
@@ -28,7 +28,7 @@ export class MonitorQueueService implements OnModuleInit {
   async onModuleInit() {
     if (this.httpAdapterHost.httpAdapter && yargsOption.monitor) {
       this.logger.log('start queue monitor service');
-      this.userProjectConfig.queueHandler?.handlers.forEach((h, _) => {
+      this.userProjectConfig.queueHandler?.handlers.forEach((h) => {
         this.options.queues.push({
           name: h.name,
           type: 'bull', // use Bull here

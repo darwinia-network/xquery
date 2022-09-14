@@ -1,4 +1,4 @@
-import { IntoQueueCallback } from '../../../node/src/types';
+import { IntoQueueCallback } from '@xquery/types/src';
 
 /*
  Trace  and record  XCMP cross-chain message from crab parachain to karura

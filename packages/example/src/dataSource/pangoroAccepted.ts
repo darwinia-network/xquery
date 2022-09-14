@@ -1,4 +1,4 @@
-import { IntoQueueCallback } from '../../../node/src/types';
+import { IntoQueueCallback } from '@xquery/types/src';
 import { PrismaClient, A2CMessage } from '@prisma/client';
 /*
   Trace  and record  LCMP cross-chain message from pangoro to pangolin

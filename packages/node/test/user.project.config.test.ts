@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import path from 'path';
-import { UserProjectConfig, DataBaseOrmKind } from '../src/configure/user.projec.config';
+import { UserProjectConfig } from '../src/configure/user.projec.config';
 
+import { DataBaseOrmKind } from '@xquery/types/src';
 describe('Load config from user project ', () => {
   let example: string;
 

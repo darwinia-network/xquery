@@ -12,7 +12,7 @@ export async function fetchGraphqlData(
     return undefined;
   }
   try {
-    let resp = await axios.post(url, { query: queryStr });
+    const resp = await axios.post(url, { query: queryStr });
 
     // graphql querying response
     return resp.data?.data?.query[field];

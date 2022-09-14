@@ -5,64 +5,29 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'yaml';
 
-import { DataSourceFunc, QueueJobFunc } from '../types';
+import {
+  DataSourceFunc,
+  QueueJobFunc,
+  DbSchema,
+  JonHandler,
+  DataSourceHandler,
+  DataSource,
+  HandlerKind,
+  DataBaseOrmKind,
+  QueueProcess,
+} from '@xquery/types/src';
 
 // the export 'handle' function from user project
 const handle = 'handle';
 // user project config file name
 const manifest = 'project.yaml';
 
-export type FileRoot = {
-  path: string;
-};
-
-export enum DataBaseOrmKind {
-  Prisma = 'prisma',
-}
-
-export interface DataSourceHandler extends HandlerMapping<HandlerKind.DataSource, DataSourceFunc> {
-  forever: boolean;
-}
-
-export interface DataSource<H extends DataSourceHandler> extends FileRoot {
-  handlers: H[];
-}
-
-export interface JonHandler extends HandlerMapping<HandlerKind.Queue, QueueJobFunc> {
-  name: string;
-}
-
-export interface Queue<H extends JonHandler> extends FileRoot {
-  handlers: H[];
-}
-
-export interface DbOrmMap<K extends string> {
-  kind: K;
-  schemaFile?: string;
-  versionName?: string;
-}
-
-export type PrismaOrm = DbOrmMap<DataBaseOrmKind.Prisma>;
-
-export type DbSchema = PrismaOrm | undefined;
-
-export enum HandlerKind {
-  DataSource = 'dataSource',
-  Queue = 'queue',
-}
-
-export type HandlerMapping<K extends HandlerKind, F = Function> = {
-  kind: K;
-  handler: F;
-  file: string;
-};
-
 export class UserProjectConfig {
-  appName: string = '';
-  rootPath: string = '';
-  version: string = '';
+  appName = '';
+  rootPath = '';
+  version = '';
   dbSchema?: DbSchema;
-  queueHandler: Queue<JonHandler> | undefined;
+  queueHandler: QueueProcess<JonHandler> | undefined;
   dataSourceHandler: DataSource<DataSourceHandler> | undefined;
 
   static async parse(app: string): Promise<UserProjectConfig> {
@@ -76,10 +41,10 @@ export class UserProjectConfig {
       throw new Error(`unknown project folder ${app}`);
     }
 
-    let root = path.resolve(app);
+    const root = path.resolve(app);
     const manifestFile = path.resolve(root, manifest);
 
-    let projectCfg = yaml.parse(fs.readFileSync(manifestFile, 'utf-8'));
+    const projectCfg = yaml.parse(fs.readFileSync(manifestFile, 'utf-8'));
     if (projectCfg === undefined) {
       throw new Error(`failed to load config ${projectCfg}`);
     }
@@ -94,17 +59,21 @@ export class UserProjectConfig {
     };
   }
 }
-async function queueHandler(root: string, content: any): Promise<Queue<JonHandler> | undefined> {
+async function queueHandler(
+  root: string,
+  content: any
+): Promise<QueueProcess<JonHandler> | undefined> {
   if (content.queueHandlers === undefined) {
     return undefined;
   }
-  let handlers: Queue<JonHandler> = {
+  const handlers: QueueProcess<JonHandler> = {
     handlers: [],
     path: root,
   };
 
   content.queueHandlers.handlers.forEach((e) => {
-    let file = path.resolve(root, e.file);
+    const file = path.resolve(root, e.file);
+    /* eslint @typescript-eslint/no-var-requires: "off" */
     const h = require(`${file}`);
 
     let queueName = path.basename(file);
@@ -128,12 +97,12 @@ async function dataSourceHandlerr(
   if (content.dataSource === undefined) {
     return undefined;
   }
-  let handlers: DataSource<DataSourceHandler> = {
+  const handlers: DataSource<DataSourceHandler> = {
     handlers: [],
     path: root,
   };
   content.dataSource.handlers.forEach((e) => {
-    let file = path.resolve(root, e.file);
+    const file = path.resolve(root, e.file);
     const h = require(`${file}`);
     handlers.handlers.push({
       file: e.file as unknown as string,
