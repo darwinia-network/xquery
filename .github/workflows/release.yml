@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: 16
 
+      - name: Install deps
+        run: yarn install
+
       - name: Build node
         run: yarn build:node
 
