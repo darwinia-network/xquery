@@ -30,7 +30,7 @@
   "references": [
     {"path":"./packages/types/tsconfig.build.json"}
   ],
-  "include": ["packages/node/*", "packages/types/*", "jest.config.js"],
+  "include": ["packages/**/*"],
   "exclude": ["**/node_modules/**" ],
   "typeRoots":["./node_modules/@types"]
 }

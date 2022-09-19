@@ -5,8 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createPostGraphQLSchema, PostGraphileOptions } from 'postgraphile';
 import { ApolloServer, gql } from 'apollo-server-express';
-import { DatabaseOperate } from '../src/database/database.operate';
-import { plugins } from '../src/graphql/plugins';
+import { DatabaseOperate } from '../database/database.operate';
+import { plugins } from './plugins';
 
 const timeout = 10000;
 

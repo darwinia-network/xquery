@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import path from 'path';
-import { UserProjectConfig } from '../src/configure/user.projec.config';
+import { UserProjectConfig } from './user.projec.config';
 
-import { DataBaseOrmKind } from '@darwinia/xquery-type/src';
+import { DataBaseOrmKind } from '@darwinia/xquery-type';
 describe('Load config from user project ', () => {
   let example: string;
 
   beforeEach(() => {
-    example = path.resolve(__dirname, '../../example');
+    example = path.resolve(__dirname, '../../../example');
   });
 
   it('check manifest', async () => {
