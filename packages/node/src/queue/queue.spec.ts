@@ -7,15 +7,14 @@ import { QueueProcess } from './queue.process';
 import { QueueModule } from './queue.module';
 import { UserProjectModule } from '../configure/user.project.module';
 import { UserProjectConfig } from '../configure/user.projec.config';
-import { MonitorQueueService } from '../queue/monitor.queue.service';
-describe('EnqueuerService', () => {
+
+describe('Queuer handler', () => {
   let module: TestingModule;
   let mockQueue: QueueProcess;
-  let userCfg: UserProjectConfig;
-  let configService: ConfigService;
-  let add = jest.fn();
-  let process = jest.fn();
+  const add = jest.fn();
+  const process = jest.fn();
   const queueName = 'crab-queue';
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   const importQueue = (string) => {
     return { add, process };
   };
@@ -52,7 +51,7 @@ describe('EnqueuerService', () => {
           handlers: [
             {
               name: queueName,
-              handle: () => {},
+              handle: () => undefined,
             },
           ],
         },
@@ -61,8 +60,6 @@ describe('EnqueuerService', () => {
       .compile();
 
     mockQueue = module.get(QueueProcess);
-    userCfg = module.get(UserProjectConfig);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   afterAll(async () => await module.close());

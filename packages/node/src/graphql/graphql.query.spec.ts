@@ -1,9 +1,9 @@
 // Copyright 2021-2022 Darwinia Network authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { createPostGraphQLSchema, PostGraphileOptions } from 'postgraphile';
+import { createPostGraphQLSchema } from 'postgraphile';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { DatabaseOperate } from '../database/database.operate';
 import { plugins } from './plugins';
@@ -14,7 +14,6 @@ describe('Graphql query', () => {
   const dbSchema = 'test';
   const testTable = 'graphql';
 
-  let configService: ConfigService;
   let databaseService: DatabaseOperate;
 
   beforeEach(async () => {
@@ -37,9 +36,8 @@ describe('Graphql query', () => {
       providers: [DatabaseOperate],
     }).compile();
     databaseService = module.get<DatabaseOperate>(DatabaseOperate);
-    configService = module.get<ConfigService>(ConfigService);
 
-    let pool = databaseService.getPgPool();
+    const pool = databaseService.getPgPool();
 
     await pool.query(`CREATE SCHEMA IF NOT EXISTS ${dbSchema}`);
     await pool.query(`CREATE TABLE IF NOT EXISTS ${dbSchema}.${testTable} (
@@ -59,7 +57,7 @@ describe('Graphql query', () => {
   it(
     'graphql query one message',
     async () => {
-      let pool = databaseService.getPgPool();
+      const pool = databaseService.getPgPool();
       await pool.query(`INSERT INTO test.graphql(
             messageId, soureChain )
             VALUES ('0x12', 'Crab');`);
@@ -109,7 +107,7 @@ describe('Graphql query', () => {
   it(
     'graphql null field',
     async () => {
-      let pool = databaseService.getPgPool();
+      const pool = databaseService.getPgPool();
       await pool.query(`INSERT INTO test.graphql(
             messageId, soureChain )
             VALUES ('0x12', 'Crab');`);
