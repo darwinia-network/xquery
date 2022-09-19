@@ -7,7 +7,7 @@ import { Injectable, OnApplicationShutdown, OnModuleInit, Inject, Logger } from 
 import { UserProjectConfig } from '../configure/user.projec.config';
 import { sleep } from '../utils/utils';
 
-import { BullQueue, DataSourceFunc, DataBaseOrmKind } from '@xquery/types/src';
+import { BullQueue, DataSourceFunc, DataBaseOrmKind } from '@darwinia/xquery-type';
 
 @Injectable()
 export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {

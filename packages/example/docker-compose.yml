@@ -48,7 +48,6 @@ services:
       volumes:
         - ./:/app
       command:
-        - --
         - --app=/app 
         - --port=5000
         - --monitor=true

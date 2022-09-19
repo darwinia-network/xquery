@@ -1,5 +1,5 @@
 import { PrismaClient, A2CMessage } from '@prisma/client';
-import { QueueHandler } from '@xquery/types';
+import { QueueHandler } from '@darwinia/xquery-type';
 
 /**
  *

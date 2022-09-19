@@ -4,7 +4,7 @@
 import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
 
 import { UserProjectConfig } from '../configure/user.projec.config';
-import { BullQueue, QueueJobFunc, QueueHandler } from '@xquery/types/src';
+import { BullQueue, QueueJobFunc, QueueHandler } from '@darwinia/xquery-type';
 
 const concurrentCount = 10;
 

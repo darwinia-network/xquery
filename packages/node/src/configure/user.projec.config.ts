@@ -15,7 +15,7 @@ import {
   HandlerKind,
   DataBaseOrmKind,
   QueueProcess,
-} from '@xquery/types/src';
+} from '@darwinia/xquery-type';
 
 // the export 'handle' function from user project
 const handle = 'handle';

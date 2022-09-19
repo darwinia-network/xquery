@@ -3,5 +3,4 @@
 /scripts/*
 packages/**/dist/**
 .eslintrc.js
-
 packages/example/*

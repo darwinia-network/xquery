@@ -1,16 +1,21 @@
 {
-  "name": "@xquery/node",
-  "version": "0.1.1",
+  "name": "@darwinia/xquery-node",
+  "version": "0.1.6",
   "description": "",
   "author": "wayne",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/darwinia/xquery",
+  "homepage": "https://github.com/darwinia-network/xquery",
+  "repository": {
+    "directory": "packages/node",
+    "type": "git",
+    "url": "https://github.com/darwinia-network/xquery.git"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "rm -rf dist && tsc -b",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:prod": "ts-node dist/src/main",
+    "start:prod": "ts-node dist/main",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -19,6 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@darwinia/xquery-type": "^0.1.6",
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@nestjs/bull": "^0.6.1",
     "@nestjs/cli": "^8.1.4",
@@ -30,7 +36,6 @@
     "@types/yargs": "^16.0.4",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
-    "@xquery/types": "^0.1.1",
     "apollo-server-express": "^3.6.2",
     "bull": "^4.8.5",
     "bull-arena": "^3.29.5",
@@ -58,8 +63,7 @@
     "dotenv": "^15.0.1",
     "yaml": "^2.1.1"
   },
-  "files": [
-    "/dist",
-    "/bin"
-  ]
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
 }

@@ -3,7 +3,7 @@
  * @param data
  */
 
-import { QueueHandler } from '@xquery/types';
+import { QueueHandler } from '@darwinia/xquery-type';
 
 export async function handle(data: any): Promise<QueueHandler> {
   console.log('handle pangolinDispached data from pangoroDelivered queue');

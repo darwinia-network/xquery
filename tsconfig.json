@@ -23,12 +23,12 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "paths": {
-      "@xquery/types":["types/src"], 
-      "@xquery/types/*":["types/src/*"]
+      "@darwinia/xquery-type":["packages/types/src"], 
+      "@darwinia/xquery-type/*":["packages/types/src/*"]
     }
   },
   "references": [
-    {"path":"./packages/types/tsconfig.json"}
+    {"path":"./packages/types/tsconfig.build.json"}
   ],
   "include": ["packages/node/*", "packages/types/*", "jest.config.js"],
   "exclude": ["**/node_modules/**" ],

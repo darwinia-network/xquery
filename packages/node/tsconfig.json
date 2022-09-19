@@ -1,13 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2018",
     "sourceMap": true,
-    "outDir": "./dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "outDir": "dist",
+    "rootDir": "src",
   },
-  "references": [{
-    "path": "../types/tsconfig.build.json"
-  }],
+ "references": [
+    { "path": "../types/tsconfig.build.json" },
+  ],
+ 
   
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "test", "dist"]
 }

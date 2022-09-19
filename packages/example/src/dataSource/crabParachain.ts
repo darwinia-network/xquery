@@ -1,4 +1,4 @@
-import { IntoQueueCallback } from '@xquery/types/src';
+import { IntoQueueCallback } from '@darwinia/xquery-type';
 
 /*
  Trace  and record  XCMP cross-chain message from crab parachain to karura

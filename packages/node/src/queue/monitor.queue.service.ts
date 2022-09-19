@@ -5,7 +5,7 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
-import { ArenaOptions } from '@xquery/types/src';
+import { ArenaOptions } from '@darwinia/xquery-type';
 import { UserProjectConfig } from '../configure/user.projec.config';
 import { yargsOption } from '../yargs';
 import Arena from 'bull-arena';

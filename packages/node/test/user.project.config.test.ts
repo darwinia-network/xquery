@@ -4,7 +4,7 @@
 import path from 'path';
 import { UserProjectConfig } from '../src/configure/user.projec.config';
 
-import { DataBaseOrmKind } from '@xquery/types/src';
+import { DataBaseOrmKind } from '@darwinia/xquery-type/src';
 describe('Load config from user project ', () => {
   let example: string;
 
