@@ -21,13 +21,13 @@ jobs:
 
       - name: Install deps
         run: |
-          npm install
+          yarn install
           npx lerna bootstrap
 
       - name: Build node
-        run: npm run build:node
+        run: yarn build:node
 
       - name: Build types
-        run: npm run build:types
+        run: yarn build:types
 
 
