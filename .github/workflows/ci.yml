@@ -1,0 +1,31 @@
+name: Check pull request
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  check-package:
+    name: Check package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install deps
+        run: |
+          yarn install
+          npx lerna bootstrap
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
+
