@@ -25,7 +25,13 @@ jobs:
         uses: dkershner6/use-npm-token-action@v1
         with:
           token: "${{ secrets.NPM_TOKEN }}"
-          workspace: /root
+          workspace: packages/node
+
+      - name: Setup npm token
+        uses: dkershner6/use-npm-token-action@v1
+        with:
+          token: "${{ secrets.NPM_TOKEN }}"
+          workspace: packages/types
 
       - name: Install deps
         run: |
