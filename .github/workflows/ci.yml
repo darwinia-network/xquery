@@ -11,6 +11,16 @@ jobs:
   check-package:
     name: Check package
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
 
@@ -28,4 +38,6 @@ jobs:
 
       - name: Test
         run: yarn test
+        env:
+          DB_HOST: postgres
 
