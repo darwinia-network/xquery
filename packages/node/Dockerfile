@@ -1,6 +1,6 @@
 FROM node:16-alpine 
 
-COPY packages/node/dist /xquery
+COPY packages/node /xquery
 
 RUN npm i -g ts-node
 
