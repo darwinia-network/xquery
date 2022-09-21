@@ -29,6 +29,8 @@ jobs:
 
       - name: Install deps
         run: |
+          apk update
+          apk add jq
           yarn install
           npx lerna bootstrap
 
