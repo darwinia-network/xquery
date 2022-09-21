@@ -38,8 +38,18 @@ jobs:
       - name: Build types
         run: yarn build:types
 
+      - name: Read version
+        id: read-version
+        run: |
+          VERSION=$(cat lerna.json |  jq --raw-output '.version?')
+          if [ -z "${VERSION}" ]; then
+            echo 'No version found in lerna.json file';
+            exit 1
+          fi
+          echo "::set-output name=VERSION::$VERSION"
+
       - name: Update version
-        run: yarn lernaversion
+        run: yarn lernaversion --yes ${{ steps.read-version.outputs.VERSION }}
 
       - name: Release
         run: yarn build:release
