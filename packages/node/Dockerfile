@@ -4,6 +4,6 @@ COPY packages/node/dist /xquery
 
 RUN npm i -g ts-node
 
-ENTRYPOINT ["ts-node", "/xquery/main"]
+ENTRYPOINT ["ts-node", "/xquery/dist/main.js"]
 
 CMD [ "--port", "6000" ]

@@ -9,8 +9,52 @@ on:
 
 
 jobs:
-  build-package:
-    name: Build package
+
+  publish-docker-image:
+    name: Publish docker image
+    runs-on: ubuntu-latest
+    container:
+      image: node:16-alpine
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.QUAY_IO_BOT_USERNAME }}
+          password: ${{ secrets.QUAY_IO_BOT_PASSWORD }}
+          registry: quay.io
+
+      - uses: olegtarasov/get-tag@v2.1
+        id: tag-name
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 7
+
+      - name: Build and publish docker image
+        run: |
+          IMAGE_NAME=xquery
+          IMAGE_PREFIX=quay.io/darwinia-network
+          IMAGE_PUSH_NAME_TAG=${IMAGE_PREFIX}/${IMAGE_NAME}:${GIT_TAG_NAME}
+          IMAGE_PUSH_NAME_SHA=${IMAGE_PREFIX}/${IMAGE_NAME}:sha-${SHA}
+          docker build \
+            -t ${IMAGE_PUSH_NAME_TAG} \
+            -t ${IMAGE_PUSH_NAME_SHA} \
+            -f package/node/Dockerfile \
+            .
+          if [ -n "${GIT_TAG_NAME}" ]; then
+            docker push ${IMAGE_PUSH_NAME_TAG}
+          fi
+          docker push ${IMAGE_PUSH_NAME_SHA}
+
+
+  publish-npm:
+    name: Publish npm
     runs-on: ubuntu-latest
     container:
       image: node:16-alpine
@@ -54,4 +98,5 @@ jobs:
           package: packages/${{ matrix.package }}/package.json
           access: public
           token: ${{ secrets.NPM_TOKEN }}
+
 
