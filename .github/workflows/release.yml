@@ -51,8 +51,6 @@ jobs:
       - uses: benjlevesque/short-sha@v1.2
         if: ${{ matrix.package }} == "node"
         id: short-sha
-        with:
-          length: 7
 
       - name: Build and publish docker image
         if: ${{ matrix.package }} == "node"
@@ -64,7 +62,7 @@ jobs:
           docker build \
             ${GIT_TAG_NAME:+-t $IMAGE_PUSH_NAME_TAG} \
             -t ${IMAGE_PUSH_NAME_SHA} \
-            -f package/node/Dockerfile \
+            -f packages/node/Dockerfile \
             .
           if [ -n "${GIT_TAG_NAME}" ]; then
             docker push ${IMAGE_PUSH_NAME_TAG}
