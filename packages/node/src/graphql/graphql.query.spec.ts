@@ -24,11 +24,11 @@ describe('Graphql query', () => {
           ignoreEnvVars: true,
           load: [
             () => ({
-              DB_DATABASE: 'message',
-              DB_PASSWORD: '%nP*9T9dj^UV',
-              DB_USER: 'postgres',
-              DB_HOST: '47.243.92.91',
-              DB_PORT: 5432,
+              DB_DATABASE: process.env.DB_DATABASE || 'postgres',
+              DB_PASSWORD: process.env.DB_PASSWORD || 'postgres',
+              DB_USER: process.env.DB_USER || 'postgres',
+              DB_HOST: process.env.DB_HOST || '127.0.0.1',
+              DB_PORT: process.env.DB_PORT || 5432,
             }),
           ],
         }),
