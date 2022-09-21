@@ -39,21 +39,21 @@ jobs:
 
       - name: Docker login
         uses: docker/login-action@v1
-        if: matrix.package == "node"
+        if: matrix.package == 'node'
         with:
           username: ${{ secrets.QUAY_IO_BOT_USERNAME }}
           password: ${{ secrets.QUAY_IO_BOT_PASSWORD }}
           registry: quay.io
 
       - uses: olegtarasov/get-tag@v2.1
-        if: matrix.package == "node"
+        if: matrix.package == 'node'
         id: tag-name
       - uses: benjlevesque/short-sha@v1.2
-        if: matrix.package == "node"
+        if: matrix.package == 'node'
         id: short-sha
 
       - name: Build and publish docker image
-        if: matrix.package == "node"
+        if: matrix.package == 'node'
         run: |
           IMAGE_NAME=xquery
           IMAGE_PREFIX=quay.io/darwinia-network
