@@ -24,7 +24,7 @@ describe('Graphql query', () => {
           ignoreEnvVars: true,
           load: [
             () => ({
-              DB_DATABASE: process.env.DB_DATABASE || 'postgres',
+              DB_DATABASE: process.env.DB_NAME || 'postgres',
               DB_PASSWORD: process.env.DB_PASSWORD || 'postgres',
               DB_USER: process.env.DB_USER || 'postgres',
               DB_HOST: process.env.DB_HOST || '127.0.0.1',

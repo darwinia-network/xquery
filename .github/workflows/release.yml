@@ -80,8 +80,15 @@ jobs:
       - name: Update version
         run: yarn lernaversion --yes ${{ steps.read-version.outputs.VERSION }}
 
+
       - uses: JS-DevTools/npm-publish@v1
         with:
-          package: packages/${{ matrix.package }}/package.json
+          package: packages/node/package.json
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          package: packages/types/package.json
           access: public
           token: ${{ secrets.NPM_TOKEN }}

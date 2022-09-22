@@ -12,7 +12,7 @@ jobs:
     name: Check package
     runs-on: ubuntu-latest
     services:
-      postgres:
+      pgsql:
         image: postgres:13-alpine
         env:
           POSTGRES_PASSWORD: postgres
@@ -40,5 +40,5 @@ jobs:
       - name: Test
         run: yarn test
         env:
-          DB_HOST: postgres
+          DB_HOST: pgsql
 
