@@ -32,11 +32,6 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - name: Prepare deps
-        run: |
-          rm -rf node_modules/@darwinia/*
-          cp -r packages/types node_modules/@darwinia/xquery-type
-
 
       - name: Docker login
         uses: docker/login-action@v1

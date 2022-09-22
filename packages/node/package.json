@@ -24,7 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@darwinia/xquery-type": "^0.1.7",
+    "@darwinia/xquery-type": "workspace:*",
     "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@nestjs/bull": "^0.6.1",
     "@nestjs/cli": "^8.1.4",
