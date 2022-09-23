@@ -11,11 +11,11 @@ export enum DataBaseOrmKind {
   Prisma = 'prisma',
 }
 
-export interface DataSourceHandler extends HandlerMapping<HandlerKind.DataSource, DataSourceFunc> {
+export interface EntranceHandler extends HandlerMapping<HandlerKind.Entrance, EntranceFunc> {
   forever: boolean;
 }
 
-export interface DataSource<H extends DataSourceHandler> extends FileRoot {
+export interface Entrance<H extends EntranceHandler> extends FileRoot {
   handlers: H[];
 }
 
@@ -38,7 +38,7 @@ export type PrismaOrm = DbOrmMap<DataBaseOrmKind.Prisma>;
 export type DbSchema = PrismaOrm | undefined;
 
 export enum HandlerKind {
-  DataSource = 'dataSource',
+  Entrance = 'entrance',
   Queue = 'queue',
 }
 
@@ -59,7 +59,7 @@ export type QueueHandler =
     }
   | undefined;
 
-export type DataSourceFunc = (done: IntoQueueCallback) => void;
+export type EntranceFunc = (done: IntoQueueCallback) => void;
 
 export type QueueJobFunc = (data: unknown) => Promise<QueueHandler>;
 

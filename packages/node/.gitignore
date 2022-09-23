@@ -17,6 +17,7 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
+.env
 
 # IDEs and editors
 /.idea
@@ -35,3 +36,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 docker-compose.yml
+

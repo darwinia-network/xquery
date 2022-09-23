@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { QueueModule } from './queue/queue.module';
-import { DataSourceModule } from './dataSource/datasource.module';
+import { EntranceModule } from './Entrance/entrance.module';
 import { UserProjectModule } from './configure/user.project.module';
 import { DatabaseModule } from './database/database.module';
 import { GraphqlModule } from './graphql/graphql.module';
@@ -28,7 +28,7 @@ import { yargsOption } from './yargs';
       },
     }),
 
-    DataSourceModule,
+    EntranceModule,
     QueueModule,
     DatabaseModule,
     GraphqlModule,

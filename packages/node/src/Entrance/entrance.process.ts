@@ -7,12 +7,12 @@ import { Injectable, OnApplicationShutdown, OnModuleInit, Inject, Logger } from 
 import { UserProjectConfig } from '../configure/user.projec.config';
 import { sleep } from '../utils/utils';
 
-import { BullQueue, DataSourceFunc, DataBaseOrmKind } from '@darwinia/xquery-type';
+import { BullQueue, EntranceFunc, DataBaseOrmKind } from '@darwinia/xquery-type';
 
 @Injectable()
-export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
+export class EntranceProcess implements OnModuleInit, OnApplicationShutdown {
   private isShutdown = false;
-  private readonly logger = new Logger(DataSourceProcess.name);
+  private readonly logger = new Logger(EntranceProcess.name);
 
   constructor(
     private userProjectConfig: UserProjectConfig,
@@ -27,7 +27,7 @@ export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
     await this.init();
   }
 
-  private async runForever(func: DataSourceFunc) {
+  private async runForever(func: EntranceFunc) {
     while (!this.isShutdown) {
       await sleep(1);
       await func(async (queueName: string | undefined, data: unknown) => {
@@ -57,7 +57,7 @@ export class DataSourceProcess implements OnModuleInit, OnApplicationShutdown {
         throw new Error('failed to migrate database table');
       }
     }
-    this.userProjectConfig.dataSourceHandler?.handlers.forEach(async (h) => {
+    this.userProjectConfig.entranceHandler?.handlers.forEach(async (h) => {
       if (h.handler === undefined) {
         return;
       }

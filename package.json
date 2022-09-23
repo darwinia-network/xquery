@@ -20,7 +20,7 @@
     "build:types": "cd ./packages/types && yarn build",
     "build:release": "node ./scripts/publish.cjs",
     "lint": "eslint \"packages/**/*.ts\" --fix",
-    "test": "jest --coverage",
+    "test": "jest --coverage --setupFiles dotenv/config",
     "lernaversion": "lerna version --skip-git"
   },
    

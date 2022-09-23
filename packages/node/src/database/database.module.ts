@@ -3,9 +3,9 @@
 
 import { Module } from '@nestjs/common';
 import { DatabaseOperate } from './database.operate';
-import { DataSourceModule } from '../dataSource/datasource.module';
+import { EntranceModule } from '../Entrance/entrance.module';
 @Module({
-  imports: [DataSourceModule],
+  imports: [EntranceModule],
   providers: [DatabaseOperate],
   exports: [DatabaseOperate],
 })

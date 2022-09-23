@@ -55,7 +55,7 @@ describe('Queuer handler', () => {
             },
           ],
         },
-        dataSourceHandler: undefined,
+        entranceHandler: undefined,
       })
       .compile();
 

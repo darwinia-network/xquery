@@ -6,12 +6,12 @@ import path from 'path';
 import yaml from 'yaml';
 
 import {
-  DataSourceFunc,
+  EntranceFunc,
   QueueJobFunc,
   DbSchema,
   JonHandler,
-  DataSourceHandler,
-  DataSource,
+  EntranceHandler,
+  Entrance,
   HandlerKind,
   DataBaseOrmKind,
   QueueProcess,
@@ -28,7 +28,7 @@ export class UserProjectConfig {
   version = '';
   dbSchema?: DbSchema;
   queueHandler: QueueProcess<JonHandler> | undefined;
-  dataSourceHandler: DataSource<DataSourceHandler> | undefined;
+  entranceHandler: Entrance<EntranceHandler> | undefined;
 
   static async parse(app: string): Promise<UserProjectConfig> {
     if (fs.existsSync(app) == false) {
@@ -55,7 +55,7 @@ export class UserProjectConfig {
       version: projectCfg.version,
       dbSchema: await dbSchema(root, projectCfg),
       queueHandler: await queueHandler(root, projectCfg),
-      dataSourceHandler: await dataSourceHandlerr(root, projectCfg),
+      entranceHandler: await entranceHandlerr(root, projectCfg),
     };
   }
 }
@@ -90,24 +90,24 @@ async function queueHandler(
   return handlers;
 }
 
-async function dataSourceHandlerr(
+async function entranceHandlerr(
   root: string,
   content: any
-): Promise<DataSource<DataSourceHandler> | undefined> {
-  if (content.dataSource === undefined) {
+): Promise<Entrance<EntranceHandler> | undefined> {
+  if (content.entrance === undefined) {
     return undefined;
   }
-  const handlers: DataSource<DataSourceHandler> = {
+  const handlers: Entrance<EntranceHandler> = {
     handlers: [],
     path: root,
   };
-  content.dataSource.handlers.forEach((e) => {
+  content.entrance.handlers.forEach((e) => {
     const file = path.resolve(root, e.file);
     const h = require(`${file}`);
     handlers.handlers.push({
       file: e.file as unknown as string,
-      handler: h[handle] as unknown as DataSourceFunc,
-      kind: HandlerKind.DataSource,
+      handler: h[handle] as unknown as EntranceFunc,
+      kind: HandlerKind.Entrance,
       forever: true,
     });
   });

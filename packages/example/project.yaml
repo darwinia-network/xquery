@@ -6,10 +6,10 @@ dbSchema:
    file: ./prisma/schema.prisma
    migrateVersionName: init
 
-dataSource:
+entrance:
   handlers:
-    - file: ./src/dataSource/crabParachain.ts
-    - file: ./src/dataSource/pangoroAccepted.ts
+    - file: ./src/entrance/crabParachain.ts
+    - file: ./src/entrance/pangoroAccepted.ts
    
 queueHandlers:
    handlers: 
