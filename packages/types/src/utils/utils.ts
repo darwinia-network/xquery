@@ -7,7 +7,7 @@ export async function fetchGraphqlData(
   url: string | undefined,
   queryStr: string,
   field: string
-): Promise<unknown> {
+): Promise<any> {
   if (url === undefined) {
     return undefined;
   }
