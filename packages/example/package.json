@@ -1,6 +1,6 @@
 {
   "name": "xquery-example",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@darwinia/xquery-type": "^0.1.11",
+    "@darwinia/xquery-type": "^0.1.12",
     "@prisma/client": "~4.2.0",
     "axios": "^0.27.2",
     "prisma": "~4.2.0",
