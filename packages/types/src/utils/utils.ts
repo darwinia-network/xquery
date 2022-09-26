@@ -7,7 +7,7 @@ export async function fetchGraphqlData(
   url: string | undefined,
   queryStr: string,
   field: string
-): Promise<any> {
+): Promise<unknown> {
   if (url === undefined) {
     return undefined;
   }
@@ -17,7 +17,7 @@ export async function fetchGraphqlData(
     // graphql querying response
     return resp.data?.data?.query[field];
   } catch (error) {
-    throw new Error((error as Error).message);
+    console.log(error);
   }
 }
 

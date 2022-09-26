@@ -55,7 +55,8 @@ export class QueueProcess implements OnModuleInit {
           return;
         }
         if (nextHandle.queueName === queueName) {
-          this.logger.error(`ignore putting data to same worker ${nextHandle.queueName}`);
+          this.logger.log(`put data to same queue worker ${nextHandle.queueName}`);
+          await this.addJob(nextHandle.queueName, nextHandle.data);
           return;
         }
         if (nextHandle.queueName) await this.addJob(nextHandle.queueName, nextHandle.data);

@@ -5,7 +5,7 @@ import childProcess from 'child_process';
 import { Injectable, OnApplicationShutdown, OnModuleInit, Inject, Logger } from '@nestjs/common';
 
 import { UserProjectConfig } from '../configure/user.projec.config';
-import { sleep } from '../utils/utils';
+import { sleep } from '@darwinia/xquery-type';
 
 import { BullQueue, EntranceFunc, DataBaseOrmKind } from '@darwinia/xquery-type';
 
