@@ -1,22 +1,23 @@
 
 name: example
 version: 0.0.1
+ 
 dbSchema:
    kind: Prisma
    file: ./prisma/schema.prisma
-   migrateVersionName: init
+   migrateVersionName: lcmp
 
+ 
 entrance:
   handlers:
-    - file: ./src/entrance/crabParachain.ts
-    - file: ./src/entrance/pangoroAccepted.ts
-   
+    - file: ./src/entrance/crabAccepted.ts
+ 
 queueHandlers:
    handlers: 
-    - file: ./src/handlers/pangoroDelivered.ts
-    - file: ./src/handlers/pangolinDispached.ts
-    - file: ./src/handlers/karura.ts
-    - file: ./src/handlers/kusama.ts
+    - file: ./src/handlers/crabDelivered.ts  
+    - file: ./src/handlers/darwiniaDispatched.ts
+    
+   
       
     
 

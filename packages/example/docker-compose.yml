@@ -25,10 +25,10 @@ services:
       timeout: 3s
       retries: 30
 
-  xquery-node: 
+  xscan-node: 
       image: quay.io/darwinia-network/xquery:sha-47014b1
       ports:
-        - 5000:5000
+        - 8001:8001
       restart: always 
       depends_on:
         postgres:
@@ -39,18 +39,19 @@ services:
         REDIS_PORT: 6379
         REDIS_HOST: redis 
         REDIS_DB: 0
-        PGUSER: postgres
-        PGPASSWORD: postgres
-        PGDATABASE: postgres
-        PGHOST: postgres
-        PGPORT: 5432
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_DATABASE: postgres
+        DB_HOST: postgres
+        DB_PORT: 5432
         DATABASE_URL: "postgresql://postgres:postgres@postgres/postgres?schema=public"
       volumes:
         - ./:/app
       command:
         - --app=/app 
-        - --port=5000
+        - --port=8001
         - --monitor=true
+         
          
 
         

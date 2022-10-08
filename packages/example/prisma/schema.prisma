@@ -11,14 +11,18 @@ datasource db {
 }
 
 
-model A2CMessage{
-    messageId String @id 
-    soureChain String @default("")
-    updateAt DateTime @default(now())
+model crab2darwiniaLcmpMessage{
+    id        Int    @id @default(autoincrement()) 
+    messageId String @unique        // laneId + nonce
+    soureChain String @default("")  
+    targetChain String @default("") 
+    messageAcceptedHash String @default("")
+    messageDeliveredHash String @default("")
+    messageDispatchedHash String @default("")
+    acceptedTime String @default("")
     deliveredTime String @default("")
-    acceptedHash String @default("")
-    dispatchHash String @default("")
-    deliveredHash String @default("")
-    authorId Int  @unique
+    dispatchedTime String @default("")
+    dispatchedResult String @default("")
+    deliveredResult String @default("")
     
 }
