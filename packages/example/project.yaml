@@ -5,7 +5,7 @@ version: 0.0.1
 dbSchema:
    kind: Prisma
    file: ./prisma/schema.prisma
-   migrateVersionName: lcmp
+   migrateVersionName: init
 
  
 entrance:
