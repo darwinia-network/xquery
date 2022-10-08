@@ -1,0 +1,46 @@
+name: Check pull request
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+
+jobs:
+  check-package:
+    name: Check package
+    runs-on: ubuntu-latest
+    container:
+      image: node:16-alpine
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install deps
+        run: |
+          yarn install
+          npx lerna bootstrap
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test
+        run: yarn test
+        env:
+          DB_HOST: postgres
+

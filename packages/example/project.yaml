@@ -1,0 +1,25 @@
+
+name: example
+version: 0.0.1
+ 
+dbSchema:
+   kind: Prisma
+   file: ./prisma/schema.prisma
+   migrateVersionName: init
+
+ 
+entrance:
+  handlers:
+    - file: ./src/entrance/crabAccepted.ts
+ 
+queueHandlers:
+   handlers: 
+    - file: ./src/handlers/crabDelivered.ts  
+    - file: ./src/handlers/darwiniaDispatched.ts
+    
+   
+      
+    
+
+    
+        

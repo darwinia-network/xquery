@@ -1,17 +1,36 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2018",
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "moduleResolution": "node",
     "sourceMap": true,
+    "declaration": true,
+    "inlineSources": true,
     "outDir": "dist",
+    "baseUrl": ".",
     "strict": true,
+    "composite": true,
     "lib": [
       "esnext",
       "es2018",
       "esnext.asynciterable"
     ],
     "esModuleInterop": true,
-    "target": "es2018",
-    "module": "commonjs",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@darwinia/xquery-type":["packages/types/src"], 
+      "@darwinia/xquery-type/*":["packages/types/src/*"]
+    }
   },
+  "references": [
+    {"path":"./packages/types/tsconfig.build.json"}
+  ],
+  "include": ["packages/**/*"],
+  "exclude": ["**/node_modules/**" ],
+  "typeRoots":["./node_modules/@types"]
 }

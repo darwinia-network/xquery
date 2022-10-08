@@ -1,0 +1,27 @@
+{
+  "name": "@darwinia/xquery-type",
+  "version": "0.1.12",
+  "description": "",
+  "author": "wayne",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "homepage": "https://github.com/darwinia-network/xquery",
+  "repository": {
+    "directory": "packages/types",
+    "type": "git",
+    "url": "https://github.com/darwinia-network/xquery.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && tsc -b"
+  },
+  "dependencies": {
+    "bull": "^4.8.5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "files": [
+    "/dist"
+  ]
+}

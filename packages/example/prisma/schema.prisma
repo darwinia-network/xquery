@@ -1,0 +1,28 @@
+ 
+
+generator client {
+    provider = "prisma-client-js"
+   
+}
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+
+}
+
+
+model crab2darwiniaLcmpMessage{
+    id        Int    @id @default(autoincrement()) 
+    messageId String @unique        // laneId + nonce
+    soureChain String @default("")  
+    targetChain String @default("") 
+    messageAcceptedHash String @default("")
+    messageDeliveredHash String @default("")
+    messageDispatchedHash String @default("")
+    acceptedTime String @default("")
+    deliveredTime String @default("")
+    dispatchedTime String @default("")
+    dispatchedResult String @default("")
+    deliveredResult String @default("")
+    
+}

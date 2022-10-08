@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+    branches: [framework]
+
+jobs:
+
+  publish:
+    name: Publish ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    container:
+      image: node:16-alpine
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install deps
+        run: |
+          apk update
+          apk add jq docker
+          yarn install
+          npx lerna bootstrap
+
+      - name: Build package
+        run: yarn build
+
+
+      - name: Docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.QUAY_IO_BOT_USERNAME }}
+          password: ${{ secrets.QUAY_IO_BOT_PASSWORD }}
+          registry: quay.io
+
+      - uses: olegtarasov/get-tag@v2.1
+        id: tag-name
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+
+      - name: Build and publish docker image
+        run: |
+          IMAGE_NAME=xquery
+          IMAGE_PREFIX=quay.io/darwinia-network
+          IMAGE_PUSH_NAME_TAG=${IMAGE_PREFIX}/${IMAGE_NAME}:${GIT_TAG_NAME}
+          IMAGE_PUSH_NAME_SHA=${IMAGE_PREFIX}/${IMAGE_NAME}:sha-${SHA}
+          docker build \
+            ${GIT_TAG_NAME:+-t $IMAGE_PUSH_NAME_TAG} \
+            -t ${IMAGE_PUSH_NAME_SHA} \
+            -f packages/node/Dockerfile \
+            .
+          if [ -n "${GIT_TAG_NAME}" ]; then
+            docker push ${IMAGE_PUSH_NAME_TAG}
+          fi
+          docker push ${IMAGE_PUSH_NAME_SHA}
+
+
+      - name: Read version
+        id: read-version
+        run: |
+          VERSION=$(cat lerna.json |  jq --raw-output '.version?')
+          if [ -z "${VERSION}" ]; then
+            echo 'No version found in lerna.json file';
+            exit 1
+          fi
+          echo "::set-output name=VERSION::$VERSION"
+
+      - name: Update version
+        run: yarn lernaversion --yes ${{ steps.read-version.outputs.VERSION }}
+
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          package: packages/node/package.json
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          package: packages/types/package.json
+          access: public
+          token: ${{ secrets.NPM_TOKEN }}

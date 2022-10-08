@@ -1,0 +1,20 @@
+0 warn deprecated --skip-git has been replaced by --no-git-tag-version --no-push
+1 silly argv {
+1 silly argv   _: [ 'version' ],
+1 silly argv   lernaVersion: '5.4.0',
+1 silly argv   '$0': 'lerna',
+1 silly argv   gitTagVersion: false,
+1 silly argv   'git-tag-version': false,
+1 silly argv   push: false
+1 silly argv }
+2 notice cli v5.4.0
+3 verbose rootPath /Users/lk/jsProject/itering/grant/xscan
+4 error Error: Unsupported URL Type "workspace:": workspace:*
+4 error     at unsupportedURLType (/usr/local/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:203:15)
+4 error     at fromURL (/usr/local/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:261:13)
+4 error     at Function.resolve (/usr/local/lib/node_modules/lerna/node_modules/npm-package-arg/npa.js:80:12)
+4 error     at /usr/local/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:66:30
+4 error     at Array.forEach (<anonymous>)
+4 error     at /usr/local/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:60:38
+4 error     at Map.forEach (<anonymous>)
+4 error     at new PackageGraph (/usr/local/lib/node_modules/lerna/node_modules/@lerna/package-graph/index.js:49:10)
