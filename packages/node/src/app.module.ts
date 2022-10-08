@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { QueueModule } from './queue/queue.module';
-import { EntranceModule } from './Entrance/entrance.module';
+import { EntranceModule } from './entrance/entrance.module';
 import { UserProjectModule } from './configure/user.project.module';
 import { DatabaseModule } from './database/database.module';
 import { GraphqlModule } from './graphql/graphql.module';

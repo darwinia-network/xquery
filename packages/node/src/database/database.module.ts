@@ -3,7 +3,7 @@
 
 import { Module } from '@nestjs/common';
 import { DatabaseOperate } from './database.operate';
-import { EntranceModule } from '../Entrance/entrance.module';
+import { EntranceModule } from '../entrance/entrance.module';
 @Module({
   imports: [EntranceModule],
   providers: [DatabaseOperate],
